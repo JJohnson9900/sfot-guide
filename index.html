@@ -1,0 +1,791 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#EEF3F6"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Six Flags Over Texas Field Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Atkinson+Hyperlegible:wght@400;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: phone-first park map on real walkways (pinch, tap, route), your plan in walking order, then the reference. Day palette in light, Fright Fest night in dark. */
+:root{
+  --bg:#EEF3F6; --card:#FFFFFF; --ink:#13202A; --muted:#566673; --line:#D5DEE5;
+  --map:#DCE6EC; --walk:#F9FCFD; --walkedge:#BCCAD3; --lake:#9CC6E4; --lakeline:#7FB0D6; --tex:#13202A; --accent:#C2361F; --gold:#E3A21A; --you:#E3A21A; --route:#13202A;
+  --coaster:#C2361F; --thrill:#7A3EC0; --family:#11806F; --kids:#CC3F7C; --water:#1F78C8;
+  --fright:#D9581A; --food:#9A6A12; --help:#4A5866; --closed:#97A3AD;
+  --area-op:.22;
+  --display:"Bungee","Arial Black",Impact,sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#110F18; --card:#1B1826; --ink:#ECE8F4; --muted:#A49DB5; --line:#2D2840;
+  --map:#16131F; --walk:#2B2740; --walkedge:#0B0910; --lake:#1C2B4A; --lakeline:#2B4470; --tex:#FFFFFF; --accent:#FF7A3D; --gold:#F4C04A; --you:#F4C04A; --route:#F4C04A;
+  --coaster:#FF6B4A; --thrill:#B48CFF; --family:#3CC7AE; --kids:#FF7FB4; --water:#5AB0FF;
+  --fright:#FF8F3D; --food:#E0B050; --help:#9AA8B6; --closed:#5E5870;
+  --area-op:.3; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#110F18; --card:#1B1826; --ink:#ECE8F4; --muted:#A49DB5; --line:#2D2840;
+  --map:#16131F; --walk:#2B2740; --walkedge:#0B0910; --lake:#1C2B4A; --lakeline:#2B4470; --tex:#FFFFFF; --accent:#FF7A3D; --gold:#F4C04A; --you:#F4C04A; --route:#F4C04A;
+  --coaster:#FF6B4A; --thrill:#B48CFF; --family:#3CC7AE; --kids:#FF7FB4; --water:#5AB0FF;
+  --fright:#FF8F3D; --food:#E0B050; --help:#9AA8B6; --closed:#5E5870;
+  --area-op:.3; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 40px}
+.wrap{max-width:1180px;margin:0 auto;display:grid;gap:18px}
+@media (min-width:920px){.wrap{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);align-items:start}
+  .mapcol{position:sticky;top:12px}}
+h1,h2{font-family:var(--display);font-weight:400;letter-spacing:.01em;text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,7vw,40px);line-height:1}
+h2{font-size:19px;line-height:1.1}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.mapcol,.infocol{display:grid;gap:14px;min-width:0}
+header{display:grid;gap:8px}
+.sub{color:var(--muted);margin:0}
+.herebar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.herechip{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 12px 6px 8px;font-size:14px;min-width:0}
+.herechip i{width:12px;height:12px;border-radius:50%;background:var(--you);box-shadow:0 0 0 3px color-mix(in srgb,var(--you) 30%,transparent);flex:none}
+.status{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.status b{color:var(--fright);font-weight:500}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,.row:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn{background:var(--ink);color:var(--bg);border:0;border-radius:999px;padding:7px 14px;font-weight:700;font-size:14px}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.on{background:var(--you);color:#1a1405;border-color:var(--you)}
+.btn.small{padding:5px 11px;font-size:13px}
+
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 13px;font-size:14px;display:inline-flex;gap:7px;align-items:center;white-space:nowrap}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--c)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+.mapbox{position:relative;background:var(--map);border:1px solid var(--line);border-radius:18px;overflow:hidden;height:min(64vh,600px);min-height:340px}
+#map{width:100%;height:100%;display:block;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+#map.moving{cursor:grabbing}
+#map.placing{cursor:crosshair}
+.area{fill-opacity:var(--area-op);stroke:var(--map);stroke-width:18;stroke-linejoin:round}
+.walk{fill:none;stroke:var(--walk);stroke-linecap:round;stroke-linejoin:round}
+.walkcase{fill:none;stroke:var(--walkedge);stroke-linecap:round;stroke-linejoin:round}
+.lake{fill:var(--lake);stroke:var(--lakeline);stroke-width:14}
+.creek{fill:none;stroke:var(--lake);stroke-linecap:round;stroke-linejoin:round}
+.shadow{fill:#000;opacity:.07}
+.grain circle{fill:var(--tex);opacity:.06}
+.stalk line{stroke-linecap:round}
+.stalk text{font-family:var(--mono);font-weight:500;fill:var(--ink);paint-order:stroke;stroke:var(--card);text-anchor:middle}
+.scale{position:absolute;left:12px;bottom:12px;display:flex;align-items:flex-end;gap:10px;pointer-events:none;font-family:var(--mono);font-size:11px;color:var(--ink)}
+.scale .bar{height:7px;border:2px solid var(--ink);border-top:0;transition:width .15s}
+.scale .north{display:grid;justify-items:center;line-height:1;font-weight:500}
+.scale .north svg{width:14px;height:18px;fill:var(--ink)}
+.alabel{font-family:var(--display);fill:var(--muted);opacity:.9;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:var(--map);letter-spacing:.04em}
+.mk circle{stroke:var(--card)}
+.mk text{font-family:var(--body);font-weight:700;fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-linejoin:round;pointer-events:none}
+.mk.closed circle{fill:var(--closed)}
+.mk .glyph{font-family:var(--mono);font-weight:500;fill:var(--bg);stroke:none;text-anchor:middle;pointer-events:none}
+.mk.done circle{fill-opacity:.35}
+.mk.sel circle{stroke:var(--ink)}
+#route{fill:none;stroke:var(--route);stroke-linecap:round;stroke-linejoin:round}
+#routeHalo{fill:none;stroke:var(--card);stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+@media (prefers-reduced-motion:no-preference){#route{animation:march 1s linear infinite}@keyframes march{to{stroke-dashoffset:var(--dash,-22)}}}
+.badge circle{fill:var(--ink);stroke:var(--card)}
+.badge text{fill:var(--bg);font-family:var(--mono);font-weight:500;text-anchor:middle;pointer-events:none}
+#you circle.core{fill:var(--you);stroke:var(--card)}
+#you circle.ring{fill:var(--you);opacity:.25}
+#you circle.acc{fill:var(--you);fill-opacity:.1;stroke:var(--you);stroke-opacity:.5}
+#you path.cone{fill:var(--you);opacity:.45}
+@media (prefers-reduced-motion:no-preference){#you circle.ring{animation:pulse 2s ease-out infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes pulse{0%{transform:scale(.6);opacity:.45}100%{transform:scale(1.6);opacity:0}}}
+.zoom{position:absolute;right:10px;top:10px;display:grid;gap:6px}
+.zoom button{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-size:20px;font-weight:700;line-height:1}
+.zoom button.me{font-size:12px;font-family:var(--mono)}
+.zoom button.on{background:var(--you);color:#1a1405;border-color:var(--you)}
+.hint{position:absolute;left:10px;top:10px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:13px;color:var(--ink);max-width:calc(100% - 80px)}
+.sheet{position:absolute;left:10px;right:10px;bottom:10px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:0 10px 30px rgba(0,0,0,.18);display:grid;gap:8px;max-height:60%;overflow:auto}
+.sheet .top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.sheet h3{margin:0;font-size:18px;line-height:1.2}
+.sheet .meta{display:flex;flex-wrap:wrap;gap:6px;font-size:13px}
+.sheet p{margin:0;font-size:15px}
+.sheet .acts{display:flex;gap:8px;flex-wrap:wrap}
+.x{border:0;background:transparent;font-size:22px;line-height:1;padding:2px 4px;color:var(--muted)}
+.pill{font-family:var(--mono);font-size:12px;border-radius:6px;padding:2px 7px;background:color-mix(in srgb,var(--c,var(--muted)) 16%,transparent);color:var(--c,var(--ink));white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;display:grid;gap:12px;min-width:0}
+.panel.night{background:color-mix(in srgb,var(--fright) 9%,var(--card));border-color:color-mix(in srgb,var(--fright) 35%,var(--line))}
+.panel p{margin:0}
+.phead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.list{display:grid;gap:2px;margin:0;padding:0;list-style:none}
+.row{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;background:transparent;border:0;border-radius:10px;padding:9px 6px}
+.row:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.row i{width:12px;height:12px;border-radius:50%;background:var(--c)}
+.row b{display:block;font-size:15px}
+.row small{display:block;color:var(--muted);font-size:13px}
+.row .r{display:grid;justify-items:end;gap:2px;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
+.row .r em{font-style:normal;color:var(--muted);font-size:12px}
+.row.isclosed b{text-decoration:line-through;color:var(--muted)}
+.stat{display:flex;gap:18px;flex-wrap:wrap}
+.stat div{display:grid}
+.stat b{font-family:var(--display);font-weight:400;font-size:26px;line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.plan{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.plan li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.plan li:first-child{border-top:0}
+.plan .num{width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-family:var(--mono);font-size:13px}
+.plan li.isdone .num{background:var(--closed)}
+.plan li.isdone .nm{text-decoration:line-through;color:var(--muted)}
+.plan .nm{all:unset;cursor:pointer;font-weight:700;display:block}
+.plan .nm:focus-visible{outline:2px solid var(--accent)}
+.plan small{display:block;color:var(--muted);font-size:13px}
+.plan .ck{display:flex;gap:6px;align-items:center}
+.plan .ck button{border:1px solid var(--line);background:transparent;border-radius:8px;padding:4px 8px;font-size:12px;font-family:var(--mono)}
+.plan .ck button.on{background:var(--family);border-color:var(--family);color:#fff}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.empty{color:var(--muted);font-size:15px}
+ol.steps{margin:0;padding-left:22px;display:grid;gap:8px}
+ol.steps li::marker{font-family:var(--display);color:var(--accent)}
+.ladder{display:grid;gap:7px}
+.ladder .lr{display:grid;grid-template-columns:minmax(0,9.5em) minmax(0,1fr);gap:10px;align-items:center;font-size:14px}
+.ladder .lr span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ladder .bar{height:16px;border-radius:0 5px 5px 0;background:var(--c,var(--muted));display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-family:var(--mono);font-size:11px;color:var(--card);min-width:42px}
+.ladder .bar.ref{background:transparent;border:1.5px dashed var(--muted);color:var(--muted)}
+.facts{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.facts li{display:grid;gap:2px}
+.facts button{all:unset;cursor:pointer;font-weight:700;color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.facts button:focus-visible{outline:3px solid var(--accent)}
+.changes{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.changes li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:baseline}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-radius:5px;padding:2px 6px;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c);white-space:nowrap}
+.ffgrid{display:grid;gap:12px}
+@media (min-width:560px){.ffgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ffgrid h3{margin:0 0 4px;font-size:14px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:500}
+.ffgrid ul{margin:0;padding:0;list-style:none;display:grid;gap:4px;font-size:14px}
+.ffgrid button{all:unset;cursor:pointer;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--fright) 60%,transparent);text-underline-offset:3px}
+.ffgrid button:focus-visible{outline:2px solid var(--fright)}
+.note{font-size:13px;color:var(--muted)}
+footer{font-size:12px;color:var(--muted);display:grid;gap:4px}
+footer a{color:var(--muted)}
+.new{color:var(--accent);font-family:var(--mono);font-size:11px;letter-spacing:.06em}
+</style>
+
+<div class="wrap">
+  <div class="mapcol">
+    <header>
+      <div class="eyebrow">Arlington TX, Saturday Oct 17 2026</div>
+      <h1>Six Flags Over Texas</h1>
+      <p class="sub">Tap anything for the walking route. Times follow the park's real paths from wherever you are.</p>
+      <div class="herebar">
+        <span class="herechip"><i></i><span id="hereText">You: Spain, at the Tormenta bull</span></span>
+        <button class="btn" id="gpsBtn" type="button">Live GPS</button>
+        <button class="btn ghost" id="moveBtn" type="button">Tap to place</button>
+      </div>
+      <div class="status" id="status"></div>
+    </header>
+
+    <div class="chips" id="chips" role="toolbar" aria-label="Show on map"></div>
+
+    <div class="mapbox" id="mapbox">
+      <svg id="map" xmlns="http://www.w3.org/2000/svg" aria-label="Park map">
+        <defs><pattern id="grain" class="grain" width="80" height="80" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="6"></circle><circle cx="60" cy="60" r="6"></circle></pattern></defs><path id="shadow2" class="shadow" transform="translate(0,90)"></path><path id="shadow1" class="shadow" transform="translate(0,40)"></path><path id="creek" class="creek"></path><g id="areas"></g><path id="areaTex" fill="url(#grain)"></path><path id="lake" class="lake"></path><path id="walkCase" class="walkcase"></path><path id="walks" class="walk"></path><g id="alabels"></g>
+        <path id="routeHalo"></path><path id="route"></path>
+        <g id="sky"></g><g id="marks"></g><g id="badges"></g>
+        <g id="you"><circle class="acc" r="0"></circle><path class="cone" d=""></path><circle class="ring" r="1"></circle><circle class="core" r="1"></circle></g>
+      </svg>
+      <div class="hint" id="hint" hidden></div>
+      <div class="scale" aria-hidden="true"><div class="north"><svg viewBox="0 0 14 18"><path d="M7 0L13 14L7 11L1 14Z"></path></svg>N</div><div><div class="bar" id="scaleBar"></div><span id="scaleTxt">100 m</span></div></div>
+      <div class="zoom">
+        <button type="button" id="zin" aria-label="Zoom in">+</button>
+        <button type="button" id="zout" aria-label="Zoom out">&minus;</button>
+        <button type="button" id="zme" class="me" aria-label="Center on me">ME</button>
+        <button type="button" id="zall" class="me" aria-label="Show whole park">ALL</button>
+        <button type="button" id="zout2" class="me" aria-label="Route to the exit">OUT</button>
+      </div>
+      <div class="sheet" id="sheet" hidden aria-live="polite"></div>
+    </div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <div class="infocol">
+    <section class="panel" id="planPanel">
+      <div class="phead"><h2>My plan</h2><span class="note" id="planNote"></span></div>
+      <div class="stat" id="planStats"></div>
+      <div id="planBody"></div>
+      <div class="btnrow" id="planBtns"></div>
+    </section>
+
+    <section class="panel">
+      <div class="phead"><h2 id="listTitle">Closest to you</h2><span class="note" id="listNote"></span></div>
+      <ul class="list" id="list"></ul>
+    </section>
+
+    <section class="panel">
+      <h2>How high you'll go</h2>
+      <div class="ladder" id="ladder"></div>
+      <p class="note">Drawn to scale. The Statue of Liberty (base to torch) is there for size.</p>
+    </section>
+
+    <section class="panel night">
+      <h2>Fright Fest</h2>
+      <p>Select nights through Nov 1, so check the app for tonight's hours. Haunted houses open at 6 pm and need a Haunted Attractions Pass (from $30 for one night). Scare zones and shows come free with admission. <b>The Awakening</b> opens the night at the front gate at 7 pm.</p>
+      <div class="ffgrid" id="ffgrid"></div>
+      <p class="note">Amor Eterno, a Día de los Muertos show, also runs; the guides don't say where. Fright Fest isn't recommended for kids under 13.</p>
+    </section>
+
+    <section class="panel">
+      <h2>What changed in 2026</h2>
+      <ul class="changes">
+        <li><span class="tag" style="--c:var(--coaster)">New</span><span><b>Tormenta Rampaging Run</b> opened July 9. 309 ft, 87 mph, the tallest and fastest coaster in Texas and the first "giga" dive coaster anywhere. It took the land of La Vibora, El Diablo and the Conquistador ship.</span></li>
+        <li><span class="tag" style="--c:var(--closed)">Closed</span><span><b>Shock Wave</b> ran opening weekend in March, then shut. The park pulled it from the app and coaster list in June. The 1978 coaster still stands, but nothing's announced.</span></li>
+        <li><span class="tag" style="--c:var(--gold)">Check</span><span><b>Mini Mine Train</b> was reported closed in April, and <b>Rodeo</b> shows mixed status online. Check the Six Flags app before walking over.</span></li>
+        <li><span class="tag" style="--c:var(--fright)">Fright Fest</span><span>New this year: the <b>Día de los Muertos</b> scare zone in Mexico (right next to you), <b>Doc Varnum's Hybrid Hell Pit</b> in the Texas Arena, and the <b>Wake the Dead</b> murder-mystery show.</span></li>
+        <li><span class="tag" style="--c:var(--help)">Policy</span><span>The park is fully cashless (kiosks turn cash into a prepaid card). Guests 17 and under need a chaperone 21 or older.</span></li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>How to beat the lines</h2>
+      <ol class="steps">
+        <li><b>Ride the newest thing first.</b> Tormenta's line only grows after lunch, and you're standing at it.</li>
+        <li><b>Go against the crowd.</b> Most people turn right at the front gate. From Spain, head west into Texas for New Texas Giant and Titan while the east side fills up.</li>
+        <li><b>Save Gotham for the haunt hours.</b> Once the houses open at 6 pm, ride lines thin out. Mr. Freeze, Batman and The Joker are right beside two houses.</li>
+        <li><b>Eat off-peak.</b> Lunch before 11:30 or after 1:30. Casa de las Banderas in Mexico is the closest real meal to you.</li>
+      </ol>
+    </section>
+
+    <section class="panel">
+      <h2>Cool stuff nearby</h2>
+      <ul class="facts" id="facts"></ul>
+    </section>
+
+    <footer>
+      <span>Map positions from the fan-run Guide to SFOT map (Aug 2026), tied to GPS with 15 OpenStreetMap landmarks (typical error about 6 m). Walking times assume an easy 75 m per minute along traced main paths, so add time for crowds. Live ride status is only in the Six Flags app.</span>
+      <span>Sources: <a href="https://guidetosfot.com/parkinfo/map/" target="_blank" rel="noopener">Guide to SFOT map</a>, <a href="https://www.openstreetmap.org/#map=17/32.7565/-97.0705" target="_blank" rel="noopener">OpenStreetMap</a>, <a href="https://en.wikipedia.org/wiki/List_of_Six_Flags_Over_Texas_attractions" target="_blank" rel="noopener">Wikipedia attractions list</a>, <a href="https://en.wikipedia.org/wiki/Tormenta_Rampaging_Run" target="_blank" rel="noopener">Tormenta Rampaging Run</a>, <a href="https://screamscape.com/html/six_flags_over_texas.htm" target="_blank" rel="noopener">ScreamScape</a>, <a href="https://thrillzing.com/seasonal-events/fright-fest-2026-six-flags-over-texas/" target="_blank" rel="noopener">Thrillzing Fright Fest 2026</a>.</span>
+    </footer>
+  </div>
+</div>
+
+<script>
+(function(){
+const H=4987, M_PER_UNIT=0.145, WALK=75; // map units to meters, meters per minute
+const flip=y=>H-y;
+
+// GPS to map: affine fit on 15 OpenStreetMap landmarks (local meters east/north -> map units)
+const GEO={lat0:32.7565,lon0:-97.0705,ax:[6.99908,0.03047,4346.46],ay:[-0.00771,-6.79466,2209.51]};
+const GEOK=Math.cos(GEO.lat0*Math.PI/180);
+function ll2map(lat,lon){const e=(lon-GEO.lon0)*111320*GEOK,n=(lat-GEO.lat0)*110540;return[GEO.ax[0]*e+GEO.ax[1]*n+GEO.ax[2],GEO.ay[0]*e+GEO.ay[1]*n+GEO.ay[2]]}
+
+const SECTIONS=[
+ {n:'Gotham City',c:'#5B3FA8',l:[7120,1250],d:"M6151.9 297.1C6435.7 321.3 6905.9 397.3 7306 814.5C7731.5 1258.2 7851 1336 7895.5 1382C7940 1428 7990.5 1532 7895.5 1611C7808.8 1683.1 7539.5 1971.8 7383.1 2143.6C7319.5 2180.2 7188.1 2244.4 7070.8 2264.0C6945.4 2284.9 6845.4 2286.1 6809.5 2284.0L6827.5 2013.3L6606.5 1907.3L6606 1722.2L6385.2 1648.8L6307.5 1278.7L6286.9 1180.3L6151.9 297.1Z"},
+ {n:'Boomtown',c:'#9A5B2E',l:[5760,700],d:"M5438.1 258.3C5678.5 263.5 5874.9 270.6 5949.5 281.0C5993.5 287.0 6062.8 289.6 6149.6 296.9L6285.0 1181.2L6305.6 1279.6L6383.0 1650.0L6212.1 1839.2L6166.8 1597.7L5839.7 1480.3L5631.5 1683.0L5545.9 1588.1L5541.3 1436.0L5451.6 1276.5L5491.2 1208.4L5396.6 1090.2L5224.9 989.8L5173.6 569.8L5390.3 528.8L5406.4 435.6L5438.1 258.3Z"},
+ {n:'USA',c:'#2457A6',l:[5950,2100],d:"M5539.5 1437.2L5544 1588.5L5544.2 1589.1L5631.4 1685.9L5840.2 1482.6L6165.1 1599.2L6210.3 1844.1L6385.3 1651.1L6604 1723.7V1908.6L6825.4 2014.6L6807.1 2283.1L6428.9 2203.2L6435.5 2311.8L6772.5 2386.4L6983.2 2563.4C6823.0 2733.4 6677.1 2892.8 6647.5 2938C6481.5 3191 6417 3529 6364.5 4077.5C6347.5 4254.7 6171.4 4740.8 6046.2 4909.2L5756.8 4714.2L6163.4 4104.1L6416.5 2715.4L6402 2512.9L6384.4 2206.9L6210.2 2215.0L5968.5 2279.1L5682.5 2437.3L5493.0 2326.8L5316.4 2404.4L5043.5 2305L4913.6 2298.9L4854.6 2347H4713.5L4641.8 2425.3L4746.6 2478.4L4761.7 2580.4L4968.3 2646.5L4813.9 2837.0L4690.2 2720.3L4535.9 2543.1L4236.6 2377.5L4493.5 2253.8L4687.9 2112.3L4839.5 2051.7L4845.9 1882.5L5126.9 1885.8L5366.8 1756.4L5293.8 1597.4L5375.8 1556.9L5319.3 1429L5490.5 1350.2L5539.5 1437.2Z"},
+ {n:'Bugs Bunny Boomtown',c:'#CC3F7C',l:[5180,2700],d:"M5043.3 2306.9L5316.9 2406.4L5492.9 2329.1L5680.8 2438.6L5341.9 2741.1L5044.7 2846.3L4951.6 2950.8L4815.4 2838.3L4972.2 2645.4L4762.9 2578.7L4748.4 2476.8L4645.4 2424.3L4714.9 2349H4855.6L4914.8 2301.0L5043.3 2306.9Z"},
+ {n:'Star Mall',c:'#6B7280',l:[4470,2960],d:"M4508.0 2530.0L4533.8 2544.2L4688.7 2721.6L4814.1 2839.9L4950.4 2952.9L4739.8 3225.0L4562.9 3056.5L4529.5 3091.0L4236.1 2783.7L3993.4 2589.9L4083.4 2498.9L4147.5 2437L4233.2 2378.5L4508.0 2530.0Z"},
+ {n:'Old South & France',c:'#2F7A4A',l:[4280,2080],d:"M3889.6 1441.9L4231.9 1656L4497.7 1672.9L4782.3 1808.8L4843.4 1881.8L4837.5 2051.3L4686.9 2110.6L4492.4 2252.1L4232.8 2376.4L4148 2435.5L3942.4 2347.0L3886.3 2299.8L3827.5 2054.6L3716 2006.3V1769.1L3742.9 1647.2L3721.6 1398.8L3889.6 1441.9Z"},
+ {n:'Mexico & Spain',c:'#D9822B',l:[3560,3560],d:"M3515.1 2688.5L3754.2 2654.4L3991.2 2591.1L4112.9 2688.0L4234.3 2785.2L4528.1 3092.4L4291.7 3329.9L4153.5 3515.6C4035.7 3554.9 3860.8 3686.6 3656 3798.5C3476.5 3896.5 3215.0 4055.6 3082 4005C2829.5 3909 2883.5 3335.5 2698 3185C2641.5 3139.1 2587.9 3109.7 2536.9 3091.4L2722.8 2466.8L3185.6 2323.6L3515.1 2688.5Z"},
+ {n:'Tower',c:'#2A6F74',l:[3050,620],d:"M2556.5 433.5C2823 194.5 3230.5 226 3378.5 228C3526.4 230 4309.9 244.4 4310 244.5C4604.4 247.2 5070.0 250.4 5435.1 258.2L5404.4 435.5L5388.1 527.1L5170.8 568.1L5223.0 991.1L5395.3 1091.7L5488.7 1208.5L5449.3 1276.4L5489.6 1348.0L5316.1 1428L5373.2 1556.0L5291.1 1596.5L5363.7 1755.0L5126.2 1883.9L4845.0 1880.5L4783.6 1807.1L4498.2 1671.0L4232.3 1654.0L3890.4 1440.0L3720.9 1396.2L3644.5 1201.8V1091.0L3782.7 1093.6L3828 1042.0L3830.5 969.1L3807.4 944.6L3782.4 918.0L3607.3 902.9L3192.8 1113.4L2889.6 1058.5L2387.2 1085.2C2368.5 729.1 2352.4 616.5 2556.5 433.5Z"},
+ {n:'Texas',c:'#B23A3A',l:[2700,1500],d:"M3781.0 919.9L3806 945.9L3827.9 969.3L3826.0 1041.6L3781.0 1091.4L3642 1088.9V1201.3L3719.0 1397.3L3740.9 1647.0L3713.5 1768.8V2007.6L3826.1 2056.2L3884.1 2300.5L3941.8 2348.9L4147 2436L4081.5 2498.0L3990.9 2589.1L3751.8 2652.5L3516.3 2685.9L3186.3 2321.3L2721.1 2464.7L2534.7 3090.6C2398.2 3042.4 2279.6 3073.4 2170.5 3082.5C2034.3 3093.8 1663.5 3364 1321 3362C978.5 3360 728.5 3082.5 611.5 2970C494.5 2857.5 1.5 2556.5 1.5 2438.5C1.5 2320.5 57.5 2315.5 101 2315.5C144.5 2315.5 825.5 2581.5 1090 2589C1354.5 2596.5 2399 2186.5 2399 1489C2399 1327.0 2393.1 1196.3 2387.4 1088.0L2889.0 1060.5L3193.1 1115.5L3607.6 905.0L3781.0 919.9Z"}
+];
+const SUBLABELS=[['Spain',3020,3720],['Mexico',3960,3400]];
+
+// Main walkways, traced from the park map (map units, north up)
+const NODES={bull:[3436,3110],spainW:[3200,2870],aserr:[3300,2620],mexico:[3760,3000],mexS:[4050,2850],star:[4396,2708],starN:[4380,2450],
+ texasSt:[3754,2411],texW:[3165,2231],titanPath:[2575,2411],titan:[2113,2513],texN:[3498,2052],speel:[3293,1500],derrick:[3960,1080],
+ tower:[4400,1110],towerE:[4883,1128],superman:[5088,1000],diveB:[5354,1257],boom:[5850,1300],rmt:[5713,960],boomE:[6174,1231],
+ gothW:[6420,1250],goth:[6893,1641],joker:[7650,1580],riddler:[7098,2000],gothS:[6534,1949],usaE:[6226,2154],jrsPath:[6431,2359],
+ jrs:[6508,2700],usa:[5815,2000],jl:[5431,1846],aqua:[5328,2128],bbb:[5140,2513],starE:[4780,2616],oldS:[4268,1847],midW:[3549,1898],midE:[4883,1975],gate:[4560,3170],parking:[4536,3640],guestRel:[4860,2930]};
+const EDGES=[['bull','spainW'],['bull','mexico'],['spainW','aserr'],['aserr','texasSt'],['aserr','texW'],['mexico','mexS'],['mexS','star'],['mexico','texasSt'],
+ ['star','starN'],['starN','texasSt'],['star','starE'],['starE','bbb'],['bbb','aqua'],['aqua','jl'],['jl','usa'],['usa','usaE'],['usaE','gothS'],
+ ['gothS','goth'],['gothS','riddler'],['goth','riddler'],['goth','joker'],['goth','gothW'],['gothW','boomE'],['boomE','boom'],['boom','rmt'],
+ ['boom','diveB'],['diveB','superman'],['superman','towerE'],['towerE','tower'],['tower','derrick'],['derrick','speel'],['speel','texN'],
+ ['texN','texasSt'],['texN','texW'],['texW','titanPath'],['titanPath','titan'],['texN','midW'],['midW','oldS'],['oldS','starN'],['oldS','midE'],
+ ['midE','jl'],['midE','towerE'],['usaE','jrsPath'],['jrsPath','jrs'],['riddler','usaE'],['diveB','jl'],['starE','midE'],['star','gate'],['gate','parking'],['gate','guestRel'],['guestRel','starE']];
+
+const CAT={C:{n:'Coasters',v:'--coaster'},T:{n:'Big thrills',v:'--thrill'},F:{n:'Family',v:'--family'},K:{n:'Little kids',v:'--kids'},W:{n:'Get wet',v:'--water'}};
+// name, x, rawY, cats, height(in), fastLane, type, blurb, status, extra points
+const RIDES=[
+ ['Tormenta Rampaging Run',3118,1710,'CT',48,1,'Giga dive coaster',"New for 2026 and the tallest dive coaster ever built. It climbs 309 ft, holds you over a 285 ft drop past vertical, then lets go: 87 mph, 4 inversions, and the world's tallest Immelmann. Max rider height 76 in.",'new'],
+ ['Titan',1905,2127,'CT',48,1,'Hyper coaster','245 ft tall, 85 mph, and the longest coaster in Texas. The low helix near the end pulls heavy G forces.'],
+ ['New Texas Giant',2683,2664,'CT',48,1,'Steel-on-wood hybrid','The old wooden Texas Giant, rebuilt by RMC with steel track and a 79-degree first drop. It was the first ride of its kind and changed the coaster world.'],
+ ['Mr. Freeze',6410,3653,'CT',54,1,'Launched coaster','Launches 0 to 70 mph and shoots up a 218 ft spike. One train rides forward and the other backward.'],
+ ['Batman the Ride',6931,4163,'CT',54,1,'Inverted coaster','Your feet dangle under the track through five inversions. A classic that still hits.'],
+ ['The Joker',7818,3446,'CT',48,1,'4D free-spin coaster','Seats flip head over heels on their own as the car runs the course off a 120 ft lift.'],
+ ['Pandemonium',5848,3424,'C',47,1,'Spinning coaster','Four-seat cars spin freely, so no two rides feel the same.'],
+ ['Judge Roy Scream',6507,2255,'C',48,0,'Wooden coaster',"The park's 1980 wooden coaster, an out-and-back along the lake by the front gate."],
+ ['Runaway Mine Train',5698,4041,'CF',48,1,'Mine train coaster','Opened 1966 as the first mine train coaster ever built. A designated ACE Coaster Landmark.'],
+ ['Runaway Mountain',4030,3350,'C',48,1,'Indoor coaster',"A coaster in the dark inside a mountain, at 40 mph. You can't see the turns coming."],
+ ['Aquaman: Power Wave',5327,2850,'CW',48,1,'Launched water coaster','Launches a boat up a spike and back into a huge splash. You will get wet.'],
+ ['Mini Mine Train',5935,3994,'CK',42,0,'Kids coaster','The 1969 junior mine train. It was reported closed in April, so check the app.','check'],
+ ["Wile E. Coyote's Grand Canyon Blaster",5192,2338,'CK',42,0,'Kids coaster','A first coaster for little riders in Bugs Bunny Boomtown.'],
+ ['Shock Wave',4341,4473,'C',42,0,'Looping coaster','Closed since March 2026 and pulled from the app. The 1978 double-loop coaster still stands with no reopening announced.','closed'],
+ ['The Riddler Revenge',7092,2915,'T',52,1,'Giant pendulum','A spinning pendulum that swings you nearly upside down, high over Gotham.'],
+ ['Texas SkyScreamer',6699,2853,'T',48,0,'400 ft swing ride','Swings spinning around a 400 ft tower, one of the tallest swing rides in the world.'],
+ ['Superman Tower of Power',5070,4004,'T',52,1,'Drop tower','Shoots you up the tower, then drops you.'],
+ ['Catwoman Whip',7068,3247,'T',48,1,'Spinning ride','A tilting, spinning wheel that tips riders sideways.'],
+ ['Rodeo',3636,2913,'T',54,0,'Spinning ride','Ride a bull-shaped pod that spins on several axes at once. Status is mixed online, so check the app.','check'],
+ ['Dive Bomber Alley',5337,3734,'T',48,0,'Skycoaster','Hoisted up and released into a giant swing. Extra charge.'],
+ ['El Aserradero',3160,2457,'WF',46,0,'Log flume',"Opened 1963 as the world's first log flume. It's a few steps from the bull."],
+ ['Roaring Rapids',4138,3670,'WF',42,0,'River rapids','Round rafts through whitewater. Expect a soaking.'],
+ ['Pirates of Speelunker Cave',3593,3439,'FW',42,1,'Boat dark ride','A gentle boat ride through a pirate cave, refreshed in 2022.'],
+ ['Daffy Duck Bucket Blasters',4988,2268,'KW',48,0,'Splash ride','Spin and spray other riders with water cannons.'],
+ ['Justice League: Battle for Metropolis',5454,3327,'F',48,1,'Shooter dark ride','Blast targets beside the Justice League and compare scores at the end.'],
+ ['Silver Star Carousel',4199,2468,'F',42,0,'Antique carousel','A hand-carved Dentzel carousel at the entrance plaza.'],
+ ['Casa Magnetica',3391,2417,'F',42,0,'Tilted house','A walk-through house built on a tilt that messes with your balance.'],
+ ['Dino Off Road Adventure',3047,3223,'F',48,0,'Car ride','Drive antique cars past 15 animatronic dinosaurs.'],
+ ['Oil Derrick',3957,3930,'F',42,0,'Observation tower','A 300 ft oil derrick with an observation deck. Best view in the park, Tormenta included.'],
+ ['Six Flags Railroad',2938,3025,'F',42,0,'Steam train','Real 1890s-era steam locomotives circle the park. Stations in Texas and Boomtown.',null,[[6303,3598]]],
+ ['Caddo Lake Barge',4685,3687,'F',42,0,'Rocking tug','A rocking, spinning boat for all ages.'],
+ ['Cloud Bouncer',6153,2937,'F',42,0,'Balloon ride','Gentle balloon tower in USA.'],
+ ["Boot Scootin'",3130,2970,'FK',36,0,'Bouncing boots','Little ones bounce in giant cowboy boots.'],
+ ['Sidewinder',2451,2158,'F',48,0,'Scrambler','A classic scrambler moved here from the old AstroWorld.'],
+ ['El Sombrero',4055,1871,'F',42,0,'Hat ride','A spinning, tilting sombrero.'],
+ ['La Fiesta de las Tazas',3726,1766,'F',42,0,'Teacups','Spin your own teacup as hard as you dare.'],
+ ['Gunslinger',6171,3766,'F',42,0,'Swing ride','Classic chair swings in Boomtown.'],
+ ['Batwing',6621,3492,'F',48,0,'Flying ride','Steer your own plane up and down.'],
+ ['Six Flags Speedway',4151,4338,'F',58,0,'Go-karts','Race go-karts. Extra charge.'],
+ ['Taz Tornado Swings',5499,2597,'K',36,0,'Kiddie swings','Swings for small riders.'],
+ ['Marvin the Martian Space Rockets',5311,2466,'K',36,0,'Kiddie jets','Little rockets that go up and down.'],
+ ['Bugs Bunny Cloud Bouncer',5294,2397,'K',42,0,'Kiddie tower','A bouncing kiddie tower.'],
+ ['Sylvester and Tweety Pounce and Bounce',4989,2163,'K',42,0,'Family drop','A gentle drop tower for kids.'],
+ ['Looney Tunes Adventure Camp',4966,2609,'K',42,0,'Play area','Climb, slide, and burn off energy.'],
+ ["Speedy Gonzales' Truckin' Across America",4765,2536,'K',36,0,'Kiddie trucks','Little trucks on a road course.']
+];
+const FF=[
+ ['SAW: Legacy of Terror',2596,1945,'h',"Jigsaw's traps, Texas section."],
+ ['The Conjuring Universe',7327,3556,'h','Warren case files: Annabelle, The Nun. Gotham City.'],
+ ['The Strangers: No Escape',7585,3557,'h','Based on The Strangers films. Gotham City.'],
+ ['EverSmile Industries',6461,3075,'h','A retro-futuristic factory tour, Majestic Theatre.'],
+ ['Terror at the Polynesian Palm',3712,2635,'h','A haunted abandoned resort near the Crazy Horse Saloon.'],
+ ["Doc Varnum's Hybrid Hell Pit",4520,3944,'h','New premium sideshow zone in the Texas Arena. Needs the pass.'],
+ ['Día de los Muertos',4109,1981,'z','New scare zone in Mexico, right by you.'],
+ ["Outlaw's Revenge",3509,2430,'z','Undead outlaws roam Texas.'],
+ ['Plague',3557,3099,'z','Fog and masked plague doctors.'],
+ ['The Last Harvest',4485,2195,'z','Scarecrows at the front gate.'],
+ ['Forsaken Fairgrounds',6883,3123,'z','A cursed carnival with clowns, Gotham City.'],
+ ['The Awakening',4258,2426,'s','The opening ritual at the front gate, 7 pm.'],
+ ['Wake the Dead',4368,3159,'s','New interactive musical murder mystery, Southern Palace.'],
+ ['Spectral Sisters',3862,2391,'s','Undead New Orleans-style harmony trio.']
+];
+const FOOD=[
+ ['Casa de las Banderas',3910,1820,'Street tacos, salads, outdoor bar.'],
+ ['Cocina Abuela',3478,2089,'Rotating Latin-inspired menu.'],
+ ['Tostitos Cantina',4103,2103,'Mexican food built around Tostitos.'],
+ ['Los Dulces',4094,2189,'Churros and soft serve.'],
+ ["Dippin' Dots Sundae Shop",3306,2536,"Dippin' Dots sundaes."],
+ ["Bubba's Hot Dogs",2983,2835,'Texas-sized hot dogs and turkey legs.'],
+ ["JB's Smokehouse Barbecue",3821,3161,'Smoked meats and sides.'],
+ ["Primo's Pizzeria",4102,2751,'NY-style slices.'],
+ ["Etienne's Cafe",4354,2898,'Beignets and pull-apart bread.'],
+ ['Chop Six',3703,3740,'Asian-inspired food with a view.'],
+ ["Newman's Cafe",5147,3766,'Big corn dogs and sauced tenders.'],
+ ['All American Cafe',5027,3010,'Burgers, chicken, pizza.'],
+ ['Roller Coaster Coffee',4527,2689,'Starbucks drinks and pastries.'],
+ ["Johnny Rocket's",6792,3318,'Burgers and shakes.'],
+ ["Ma Hunkel's Famous Chicken",6709,3135,'Chicken and fries.'],
+ ['Taiyaki',6500,3273,'Soft serve in a fish-shaped cone.'],
+ ['Boomtown Bar',5814,3722,'Beer and mixed drinks.'],
+ ["Dry Hole Charlie's",6061,3546,'Turkey legs and tenders.'],
+ ['Macho Nacho',5751,3777,'Nachos and walking tacos.'],
+ ['Star Mall Refresh Station',4547,2593,'Drinks and bottle refills.',1],
+ ['USA Refresh Station',5205,2839,'Drinks and bottle refills.',1],
+ ['Gotham Refresh Station',7199,3196,'Drinks, refills, snacks.',1],
+ ["E.G. Sugarwater's",3108,2755,'Refresh station: drinks and ICEEs.',1]
+];
+const HELP=[
+ ['First Aid',3700,1612,'First aid station.'],
+ ['Star Mall Lockers',4317,2037,'Rent a locker.'],['Mexico Lockers',3831,2245,'Rent a locker, close to Tormenta.'],
+ ['Six Flags Museum',4066,2837,'Park history since 1961.'],['Mexico Restrooms',3883,2121,'Restrooms.'],
+ ['Texas Restrooms',2930,2784,'Restrooms.'],['Texas Restrooms',3798,2826,'Restrooms.'],['Titan Restrooms',2091,2352,'Restrooms.'],
+ ['Tower Restrooms',3851,3918,'Restrooms.'],['France Restrooms',4778,2991,'Restrooms.'],['Bugs Bunny Boomtown Restrooms',5132,2458,'Restrooms.'],
+ ['Boomtown Restrooms',6205,3642,'Restrooms.'],['Gotham City Restrooms',6982,3384,'Restrooms.']
+];
+
+const items=[];
+RIDES.forEach((r,i)=>items.push({id:'r'+i,kind:'ride',name:r[0],pts:[[r[1],flip(r[2])]].concat((r[9]||[]).map(p=>[p[0],flip(p[1])])),cats:r[3],h:r[4],fl:!!r[5],type:r[6],blurb:r[7],status:r[8]||'',major:r[3].includes('C')||r[3].includes('T')}));
+FF.forEach((r,i)=>items.push({id:'f'+i,kind:'ff',name:r[0],pts:[[r[1],flip(r[2])]],ff:r[3],type:{h:'Haunted house (pass)',z:'Scare zone (free)',s:'Show (free)'}[r[3]],blurb:r[4],major:r[3]==='h'}));
+FOOD.forEach((r,i)=>items.push({id:'d'+i,kind:'food',name:r[0],pts:[[r[1],flip(r[2])]],type:r[4]?'Refresh station':'Food',blurb:r[3],refresh:!!r[4]}));
+HELP.forEach((r,i)=>items.push({id:'h'+i,kind:'help',name:r[0],pts:[[r[1],flip(r[2])]],type:'Help & restrooms',blurb:r[3]}));
+// always-on landmarks (map coords, north up)
+const PINS=[
+ ['Main entrance & exit',4554,3259,'G','Front gate','The front gate at Entry Plaza, south of Star Mall. You come in and go out through the same gate. Will Call and Guest Services are just inside.'],
+ ['Guest Relations',4862,2938,'i','Guest Relations','Tickets and passes, lost and found, accessibility help, and Fast Lane, just inside the front gate on the right.'],
+ ['Parking & tolls',4536,3651,'P','Parking','The parking toll booths, past the front gate. Note your lot letter before you walk in.']
+];
+PINS.forEach((r,i)=>items.push({id:'p'+i,kind:'help',pin:true,name:r[0],pts:[[r[1],r[2]]],glyph:r[3],type:r[4],blurb:r[5]}));
+const byId=Object.fromEntries(items.map(it=>[it.id,it]));
+const FT={'Texas SkyScreamer':400,'Tormenta Rampaging Run':309,'Oil Derrick':300,'Titan':245,'Mr. Freeze':218,'The Joker':120};
+items.forEach(it=>{if(FT[it.name])it.ft=FT[it.name]});
+const isCredit=it=>it.kind==='ride'&&it.cats.includes('C')&&it.status!=='closed';
+
+const FILTERS=[
+ {k:'rides',n:'All rides',v:'--ink',test:it=>it.kind==='ride'},
+ {k:'C',n:'Coasters',v:'--coaster',test:it=>it.kind==='ride'&&it.cats.includes('C')},
+ {k:'T',n:'Big thrills',v:'--thrill',test:it=>it.kind==='ride'&&it.cats.includes('T')},
+ {k:'F',n:'Family',v:'--family',test:it=>it.kind==='ride'&&it.cats.includes('F')},
+ {k:'K',n:'Little kids',v:'--kids',test:it=>it.kind==='ride'&&it.cats.includes('K')},
+ {k:'W',n:'Get wet',v:'--water',test:it=>it.kind==='ride'&&it.cats.includes('W')},
+ {k:'ff',n:'Fright Fest',v:'--fright',test:it=>it.kind==='ff'},
+ {k:'food',n:'Food & refills',v:'--food',test:it=>it.kind==='food'},
+ {k:'help',n:'Restrooms & help',v:'--help',test:it=>it.kind==='help'}
+];
+function colorOf(it){
+  if(it.kind==='ff')return 'var(--fright)';if(it.kind==='food')return 'var(--food)';if(it.kind==='help')return 'var(--help)';
+  if(it.status==='closed')return 'var(--closed)';return 'var('+CAT[it.cats[0]].v+')';
+}
+
+// ---------- walking graph ----------
+const nodeIds=Object.keys(NODES),NI=Object.fromEntries(nodeIds.map((k,i)=>[k,i])),NP=nodeIds.map(k=>NODES[k]),N=NP.length;
+const hyp=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+const edges=EDGES.map(([a,b])=>({a:NI[a],b:NI[b],len:hyp(NODES[a],NODES[b])}));
+const adj=nodeIds.map(()=>[]);edges.forEach(e=>{adj[e.a].push([e.b,e.len]);adj[e.b].push([e.a,e.len])});
+function snap(p){let best=null;edges.forEach((e,i)=>{const A=NP[e.a],B=NP[e.b];const dx=B[0]-A[0],dy=B[1]-A[1];let t=((p[0]-A[0])*dx+(p[1]-A[1])*dy)/(dx*dx+dy*dy);t=Math.max(0,Math.min(1,t));const q=[A[0]+t*dx,A[1]+t*dy];const off=hyp(p,q);if(!best||off<best.off)best={e:i,t,q,off,p}});return best}
+function field(p){
+  const s=snap(p),E=edges[s.e],D=new Array(N).fill(Infinity),prev=new Array(N).fill(-1),done=new Array(N).fill(false);
+  D[E.a]=s.off+s.t*E.len;D[E.b]=s.off+(1-s.t)*E.len;
+  for(;;){let u=-1;for(let i=0;i<N;i++)if(!done[i]&&D[i]<Infinity&&(u<0||D[i]<D[u]))u=i;if(u<0)break;done[u]=true;
+    adj[u].forEach(([v,w])=>{if(D[u]+w<D[v]){D[v]=D[u]+w;prev[v]=u}})}
+  return{s,D,prev};
+}
+function legTo(F,sn){
+  const E=edges[sn.e];let d=Infinity,end=-1,direct=false;
+  const da=F.D[E.a]+sn.t*E.len,db=F.D[E.b]+(1-sn.t)*E.len;
+  if(da<=db){d=da;end=E.a}else{d=db;end=E.b}
+  if(sn.e===F.s.e){const dd=F.s.off+Math.abs(sn.t-F.s.t)*E.len;if(dd<=d){d=dd;direct=true}}
+  return{d:d+sn.off,end,direct};
+}
+function routeTo(F,sn){
+  const L=legTo(F,sn),pts=[F.s.p,F.s.q];
+  if(!L.direct){const chain=[];let n=L.end;while(n>=0){chain.push(NP[n]);n=F.prev[n]}chain.reverse().forEach(p=>pts.push(p))}
+  pts.push(sn.q,sn.p);return{d:L.d,pts};
+}
+items.forEach(it=>{it.snaps=it.pts.map(snap)});
+function bestLeg(F,it){let b=null;it.snaps.forEach(sn=>{const L=legTo(F,sn);if(!b||L.d<b.d)b={...L,sn}});return b}
+const mins=d=>Math.max(1,Math.round(d*M_PER_UNIT/WALK));
+
+// ---------- state ----------
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const DEFAULT_YOU=[3436,3110];
+let you=store.get('sfot-you2',DEFAULT_YOU);
+let filter=store.get('sfot-filter','rides');if(!FILTERS.some(f=>f.k===filter))filter='rides';
+let plan=store.get('sfot-plan',[]).filter(id=>byId[id]);
+let done=new Set(store.get('sfot-done',[]).filter(id=>byId[id]));
+let showPlanRoute=store.get('sfot-showplan',true);
+let selected=null,placing=false,gpsOn=false,gpsWatch=null,follow=false,gpsAcc=0,gpsHeading=null,lastFixAt=0;
+let youField=field(you);
+
+const svg=document.getElementById('map'),NS='http://www.w3.org/2000/svg';
+const gA=document.getElementById('areas'),gL=document.getElementById('alabels'),gM=document.getElementById('marks'),gY=document.getElementById('you'),gB=document.getElementById('badges');
+const routeEl=document.getElementById('route'),haloEl=document.getElementById('routeHalo');
+const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e};
+
+SECTIONS.forEach(s=>{s.path=el('path',{d:s.d,fill:s.c,class:'area'});gA.appendChild(s.path)});
+const allD=SECTIONS.map(s=>s.d).join('');['shadow1','shadow2','areaTex'].forEach(id=>document.getElementById(id).setAttribute('d',allD));
+function smooth(P,closed){const n=P.length,g=i=>closed?P[(i+n)%n]:P[Math.max(0,Math.min(n-1,i))];let d='M'+P[0].join(' ');
+  for(let i=0;i<(closed?n:n-1);i++){const p0=g(i-1),p1=g(i),p2=g(i+1),p3=g(i+2);d+='C'+(p1[0]+(p2[0]-p0[0])/6).toFixed(0)+' '+(p1[1]+(p2[1]-p0[1])/6).toFixed(0)+' '+(p2[0]-(p3[0]-p1[0])/6).toFixed(0)+' '+(p2[1]-(p3[1]-p1[1])/6).toFixed(0)+' '+p2.join(' ')}return d+(closed?'Z':'')}
+document.getElementById('lake').setAttribute('d',smooth([[6190,2440],[6330,2560],[6270,3030],[6160,3740],[6090,4250],[5985,4610],[5780,4870],[5320,4960],[5020,4860],[5010,4250],[5110,3740],[5370,3330],[5680,2920],[5930,2620]],true));
+document.getElementById('creek').setAttribute('d',smooth([[-300,2320],[900,2160],[1700,2080],[2300,1740],[2900,1260],[3350,690],[3750,380],[4400,290],[5100,250],[5800,300],[6350,420],[6600,150],[6700,-300]],false));
+const walkD=edges.map(e=>'M'+NP[e.a].join(' ')+'L'+NP[e.b].join(' ')).join('');document.getElementById('walks').setAttribute('d',walkD);document.getElementById('walkCase').setAttribute('d',walkD);
+const labelEls=[];
+SECTIONS.forEach(s=>{const t=el('text',{x:s.l[0],y:s.l[1],class:'alabel'});t.textContent=s.n.toUpperCase();gL.appendChild(t);labelEls.push([t,1])});
+SUBLABELS.forEach(s=>{const t=el('text',{x:s[1],y:s[2],class:'alabel'});t.textContent=s[0].toUpperCase();gL.appendChild(t);labelEls.push([t,.8])});
+function sectionAt(x,y){
+  for(const s of SECTIONS){try{const p=svg.createSVGPoint();p.x=x;p.y=y;if(s.path.isPointInFill(p))return s.n}catch(e){}}
+  let best=null,bd=1e12;SECTIONS.forEach(s=>{const d=(s.l[0]-x)**2+(s.l[1]-y)**2;if(d<bd){bd=d;best=s.n}});return best;
+}
+items.forEach(it=>{it.section=sectionAt(it.pts[0][0],it.pts[0][1])});
+
+const mkEls={};
+items.forEach(it=>{it.pts.forEach(p=>{
+  const g=el('g',{class:'mk'+(it.status==='closed'?' closed':''),'data-id':it.id});
+  const c=el('circle',{cx:p[0],cy:p[1],r:6,fill:it.pin?'var(--ink)':colorOf(it)});const t=el('text',{x:p[0],y:p[1]});t.textContent=it.name;
+  g.appendChild(c);let gl=null;if(it.glyph){gl=el('text',{x:p[0],y:p[1],class:'glyph'});gl.textContent=it.glyph;g.appendChild(gl)}g.appendChild(t);gM.appendChild(g);(mkEls[it.id]=mkEls[it.id]||[]).push({g,c,t,p,gl});
+})});
+
+// ---------- view ----------
+let vb={x:0,y:0,w:8000,h:5000};
+function size(){const r=svg.getBoundingClientRect();return{w:r.width||1,h:r.height||1,r}}
+function upp(){return vb.w/size().w}
+function clampVB(){const s=size();vb.w=Math.min(Math.max(vb.w,450),10000);vb.h=vb.w*s.h/s.w;
+  vb.x=Math.min(Math.max(vb.x,-vb.w*.6),8000-vb.w*.4);vb.y=Math.min(Math.max(vb.y,-vb.h*.6),4987-vb.h*.4)}
+let raf=0;
+function apply(){clampVB();svg.setAttribute('viewBox',vb.x+' '+vb.y+' '+vb.w+' '+vb.h);if(!raf)raf=requestAnimationFrame(()=>{raf=0;relayout()})}
+function planOrder(){return optimized.order}
+function relayout(){
+  const u=upp(),f=FILTERS.find(x=>x.k===filter),inPlan=new Set(plan);
+  labelEls.forEach(([t,s])=>{t.setAttribute('font-size',(13*s*u).toFixed(1));t.setAttribute('stroke-width',(4*u).toFixed(1))});
+  const ww=Math.max(55,4*u);document.getElementById('walks').setAttribute('stroke-width',ww.toFixed(1));document.getElementById('walkCase').setAttribute('stroke-width',(ww+2.5*u).toFixed(1));
+  document.getElementById('creek').setAttribute('stroke-width',Math.max(120,5*u).toFixed(1));
+  const sky=document.getElementById('sky');sky.innerHTML='';
+  items.forEach(it=>{if(!it.ft||!(f.test(it)||it.id===selected||inPlan.has(it.id)))return;const p=it.pts[0],L=(it.ft/400)*84*u,col=colorOf(it);
+    const g=el('g',{class:'stalk'});g.appendChild(el('line',{x1:p[0],y1:p[1],x2:p[0],y2:p[1]-L,stroke:col,'stroke-width':(3*u).toFixed(1)}));
+    g.appendChild(el('circle',{cx:p[0],cy:p[1]-L,r:(3.5*u).toFixed(1),fill:col}));
+    if(u<13){const t=el('text',{x:p[0],y:(p[1]-L-6*u).toFixed(1),'font-size':(10*u).toFixed(1),'stroke-width':(3*u).toFixed(1)});t.textContent=it.ft+' ft';g.appendChild(t)}
+    sky.appendChild(g)});
+  {const target=[50,100,200,500].find(m=>m/M_PER_UNIT/u>=46)||500;document.getElementById('scaleBar').style.width=(target/M_PER_UNIT/u).toFixed(0)+'px';document.getElementById('scaleTxt').textContent=target+' m'}
+  const cands=[];
+  items.forEach(it=>{
+    const on=f.test(it)||it.id===selected||inPlan.has(it.id)||it.pin,isSel=it.id===selected;
+    (mkEls[it.id]||[]).forEach(m=>{
+      m.g.style.display=on?'':'none';m.t.style.display='none';if(!on)return;
+      m.g.classList.toggle('sel',isSel);m.g.classList.toggle('done',done.has(it.id));
+      const r=it.pin?(isSel?13:10):(isSel?11:it.major?7.5:6);if(m.gl){m.gl.setAttribute('font-size',(r*1.3*u).toFixed(1));m.gl.setAttribute('y',(m.p[1]+r*.45*u).toFixed(1))}m.c.setAttribute('r',(r*u).toFixed(1));m.c.setAttribute('stroke-width',((isSel?3:2)*u).toFixed(1));
+      const want=isSel||inPlan.has(it.id)||it.major||it.pin||u<6||filter!=='rides';
+      if(want)cands.push({m,it,r,pri:isSel?4:it.pin?3.5:inPlan.has(it.id)?3:it.major?2:1});
+    });
+  });
+  // greedy label placement in screen space: right, then left, else hide
+  cands.sort((a,b)=>b.pri-a.pri);const placed=[];
+  const hit=(b)=>placed.some(o=>b[0]<o[2]&&b[2]>o[0]&&b[1]<o[3]&&b[3]>o[1]);
+  cands.forEach(c=>{
+    const fs=c.pri===4?14:12,sx=(c.m.p[0]-vb.x)/u,sy=(c.m.p[1]-vb.y)/u,w=c.it.name.length*fs*.56,h=fs*1.25,g=c.r+4;
+    const R=[sx+g,sy-h/2,sx+g+w,sy+h/2],Lb=[sx-g-w,sy-h/2,sx-g,sy+h/2];let side=null;
+    if(!hit(R))side=R;else if(!hit(Lb))side=Lb;else if(c.pri===4)side=R;
+    if(!side)return;placed.push(side);
+    const t=c.m.t;t.style.display='';t.setAttribute('font-size',(fs*u).toFixed(1));t.setAttribute('stroke-width',(3.5*u).toFixed(1));
+    t.setAttribute('text-anchor',side===Lb?'end':'start');t.setAttribute('x',(c.m.p[0]+(side===Lb?-g:g)*u).toFixed(1));t.setAttribute('y',(c.m.p[1]+4*u).toFixed(1));
+  });
+  if(selected)(mkEls[selected]||[]).forEach(m=>gM.appendChild(m.g));
+  // route
+  routeEl.setAttribute('stroke-width',(4*u).toFixed(1));routeEl.setAttribute('stroke-dasharray',(0.1*u).toFixed(2)+' '+(11*u).toFixed(1));
+  routeEl.style.setProperty('--dash',(-11.1*u).toFixed(1));haloEl.setAttribute('stroke-width',(9*u).toFixed(1));
+  // plan badges
+  gB.innerHTML='';
+  if(!selected&&showPlanRoute){planOrder().forEach((id,i)=>{const it=byId[id];const p=optimized.at[id]||it.pts[0];const g=el('g',{class:'badge'});
+    g.appendChild(el('circle',{cx:p[0]-15*u,cy:p[1]+13*u,r:(10*u).toFixed(1),'stroke-width':(2*u).toFixed(1)}));
+    const t=el('text',{x:p[0]-15*u,y:p[1]+17*u,'font-size':(12*u).toFixed(1)});t.textContent=i+1;g.appendChild(t);gB.appendChild(g)})}
+  // you
+  const q=s=>gY.querySelector(s);const core=q('.core'),ring=q('.ring'),acc=q('.acc'),cone=q('.cone');
+  [core,ring,acc].forEach(c=>{c.setAttribute('cx',you[0]);c.setAttribute('cy',you[1])});
+  core.setAttribute('r',(9*u).toFixed(1));core.setAttribute('stroke-width',(3*u).toFixed(1));ring.setAttribute('r',(20*u).toFixed(1));
+  acc.setAttribute('r',gpsOn&&gpsAcc?(gpsAcc/M_PER_UNIT).toFixed(0):0);acc.setAttribute('stroke-width',(1*u).toFixed(1));
+  if(gpsOn&&gpsHeading!=null){const a=(gpsHeading-90)*Math.PI/180,L=34*u,sp=.45;
+    cone.setAttribute('d','M'+you[0]+' '+you[1]+'L'+(you[0]+L*Math.cos(a-sp))+' '+(you[1]+L*Math.sin(a-sp))+'A'+L+' '+L+' 0 0 1 '+(you[0]+L*Math.cos(a+sp))+' '+(you[1]+L*Math.sin(a+sp))+'Z')}else cone.setAttribute('d','');
+}
+function drawRoute(){
+  let pts=null;
+  if(selected){const it=byId[selected];const L=bestLeg(youField,it);pts=routeTo(youField,L.sn).pts}
+  else if(showPlanRoute&&optimized.pts.length)pts=optimized.pts;
+  const d=pts?('M'+pts.map(p=>p[0].toFixed(0)+' '+p[1].toFixed(0)).join('L')):'';
+  routeEl.setAttribute('d',d);haloEl.setAttribute('d',d);
+}
+function centerOn(x,y,w,animate){
+  const s=size();const nw=w||vb.w,nh=nw*s.h/s.w;const target={x:x-nw/2,y:y-nh/2,w:nw};
+  if(!animate||matchMedia('(prefers-reduced-motion: reduce)').matches){vb.x=target.x;vb.y=target.y;vb.w=target.w;apply();return}
+  const from={...vb},t0=performance.now(),D=380;
+  (function step(t){const k=Math.min(1,(t-t0)/D),e=1-Math.pow(1-k,3);vb.w=from.w+(target.w-from.w)*e;vb.x=from.x+(target.x-from.x)*e;vb.y=from.y+(target.y-from.y)*e;apply();if(k<1)requestAnimationFrame(step)})(t0);
+}
+function initialView(){const s=size();const w=Math.min(Math.max(s.w*9.5,3200),8600);if(w>=6200)centerOn(4000,2560,w);else centerOn(you[0]+200,you[1]-600,w)}
+function zoomAt(cx,cy,factor){const s=size();const wx=vb.x+(cx-s.r.left)/s.w*vb.w,wy=vb.y+(cy-s.r.top)/s.h*vb.h;
+  const nw=Math.min(Math.max(vb.w*factor,450),10000),nh=nw*s.h/s.w;vb.x=wx-(cx-s.r.left)/s.w*nw;vb.y=wy-(cy-s.r.top)/s.h*nh;vb.w=nw;apply()}
+
+const ptrs=new Map();let downTarget=null,moved=0;
+svg.addEventListener('pointerdown',e=>{svg.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(ptrs.size===1){downTarget=e.target;moved=0}else moved=99;svg.classList.add('moving')});
+svg.addEventListener('pointermove',e=>{
+  if(!ptrs.has(e.pointerId))return;const prev=ptrs.get(e.pointerId),cur={x:e.clientX,y:e.clientY};
+  if(ptrs.size===1){const u=upp();vb.x-=(cur.x-prev.x)*u;vb.y-=(cur.y-prev.y)*u;moved+=Math.abs(cur.x-prev.x)+Math.abs(cur.y-prev.y);if(moved>8)setFollow(false);ptrs.set(e.pointerId,cur);apply();return}
+  const o=[...ptrs.entries()].find(([id])=>id!==e.pointerId);if(!o)return;const op=o[1];
+  const pd=Math.hypot(prev.x-op.x,prev.y-op.y),cd=Math.hypot(cur.x-op.x,cur.y-op.y);
+  const pm={x:(prev.x+op.x)/2,y:(prev.y+op.y)/2},cm={x:(cur.x+op.x)/2,y:(cur.y+op.y)/2};
+  const s=size();const wx=vb.x+(pm.x-s.r.left)/s.w*vb.w,wy=vb.y+(pm.y-s.r.top)/s.h*vb.h;
+  const nw=Math.min(Math.max(vb.w*(pd/(cd||1)),450),10000),nh=nw*s.h/s.w;vb.x=wx-(cm.x-s.r.left)/s.w*nw;vb.y=wy-(cm.y-s.r.top)/s.h*nh;vb.w=nw;ptrs.set(e.pointerId,cur);apply();
+});
+function endPtr(e){
+  if(!ptrs.has(e.pointerId))return;const single=ptrs.size===1;ptrs.delete(e.pointerId);if(!ptrs.size)svg.classList.remove('moving');
+  if(single&&moved<8&&e.type==='pointerup'){
+    if(placing){const s=size();setYou([vb.x+(e.clientX-s.r.left)/s.w*vb.w,vb.y+(e.clientY-s.r.top)/s.h*vb.h],true);setPlacing(false);return}
+    const mk=downTarget&&downTarget.closest&&downTarget.closest('.mk');
+    if(mk)select(mk.getAttribute('data-id'),false);else if(selected)select(null);
+  }
+}
+svg.addEventListener('pointerup',endPtr);svg.addEventListener('pointercancel',endPtr);
+svg.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.clientX,e.clientY,Math.exp(e.deltaY*0.0018))},{passive:false});
+document.getElementById('zin').onclick=()=>{const s=size();zoomAt(s.r.left+s.w/2,s.r.top+s.h/2,.65)};
+document.getElementById('zout').onclick=()=>{const s=size();zoomAt(s.r.left+s.w/2,s.r.top+s.h/2,1.55)};
+const zme=document.getElementById('zme');
+zme.onclick=()=>{if(gpsOn)setFollow(true);centerOn(you[0],you[1],Math.min(vb.w,2600),true)};
+document.getElementById('zout2').onclick=()=>select('p0',true);
+document.getElementById('zall').onclick=()=>{setFollow(false);const s=size();const w=Math.max(8300,8300*(4800/8300)/(s.h/s.w));centerOn(4000,2560,Math.min(w,10000),true)};
+
+// ---------- you, GPS ----------
+const hereText=document.getElementById('hereText'),moveBtn=document.getElementById('moveBtn'),gpsBtn=document.getElementById('gpsBtn'),hint=document.getElementById('hint');
+function setYou(p,save){you=p;youField=field(you);if(save)store.set('sfot-you2',you);updateHere();recomputePlan();renderList();drawRoute();relayout();if(selected)showSheet(byId[selected])}
+function updateHere(){
+  const atDefault=hyp(you,DEFAULT_YOU)<1;
+  hereText.textContent=gpsOn&&lastFixAt?'You (GPS): '+sectionAt(you[0],you[1]):atDefault?'You: Spain, at the Tormenta bull':'You: '+sectionAt(you[0],you[1]);
+}
+function showHint(t,ms){hint.textContent=t;hint.hidden=!t;clearTimeout(showHint.t);if(t&&ms)showHint.t=setTimeout(()=>{hint.hidden=true},ms)}
+function setPlacing(on){placing=on;svg.classList.toggle('placing',on);moveBtn.classList.toggle('on',on);moveBtn.textContent=on?'Tap the map\u2026':'Tap to place';showHint(on?'Tap the map where you are now':'')}
+moveBtn.onclick=()=>{if(gpsOn)stopGps();setPlacing(!placing);if(placing){select(null);document.getElementById('mapbox').scrollIntoView({block:'nearest'})}};
+function setFollow(on){follow=on&&gpsOn;zme.classList.toggle('on',follow)}
+function stopGps(){if(gpsWatch!=null)try{navigator.geolocation.clearWatch(gpsWatch)}catch(e){}gpsWatch=null;gpsOn=false;lastFixAt=0;gpsHeading=null;setFollow(false);gpsBtn.classList.remove('on');gpsBtn.textContent='Live GPS';updateHere();relayout()}
+gpsBtn.onclick=()=>{
+  if(gpsOn){stopGps();showHint('GPS off. Your dot stays where it was.',2500);return}
+  if(!('geolocation' in navigator)){showHint("This browser can't share location. Use Tap to place.",5000);return}
+  setPlacing(false);gpsOn=true;gpsBtn.classList.add('on');gpsBtn.textContent='Finding you\u2026';showHint('Asking for your location\u2026');
+  try{gpsWatch=navigator.geolocation.watchPosition(onFix,onGpsErr,{enableHighAccuracy:true,maximumAge:3000,timeout:20000})}catch(e){onGpsErr({code:1})}
+};
+function onFix(pos){
+  const c=pos.coords,p=ll2map(c.latitude,c.longitude);
+  if(p[0]<-800||p[0]>8800||p[1]<-800||p[1]>5800){gpsBtn.textContent='GPS on';showHint("GPS puts you outside the park, so your dot stays put.",5000);return}
+  const first=!lastFixAt;lastFixAt=Date.now();gpsAcc=c.accuracy||0;gpsHeading=(c.speed>0.5&&c.heading!=null&&!isNaN(c.heading))?c.heading:null;
+  gpsBtn.textContent='GPS on';showHint(gpsAcc>40?'GPS is rough here (±'+Math.round(gpsAcc)+' m). It sharpens in open sky.':'',4000);
+  setYou(p,true);if(first)setFollow(true);
+  if(follow){const s=size();vb.x=you[0]-vb.w/2;vb.y=you[1]-vb.w*s.h/s.w/2;apply()}
+}
+const LIVE_URL='https://jjohnson9900.github.io/sfot-guide/';
+function onGpsErr(err){
+  if(err&&err.code===1&&location.hostname.indexOf('github.io')<0){stopGps();hint.innerHTML='Location is blocked in this viewer. For live GPS open <a href="'+LIVE_URL+'" target="_blank" rel="noopener" style="color:var(--accent);font-weight:700">jjohnson9900.github.io/sfot-guide</a>, or use Tap to place.';hint.hidden=false;clearTimeout(showHint.t);showHint.t=setTimeout(()=>{hint.hidden=true},12000);return}
+  const msg=err&&err.code===1?"Location is blocked. Allow location for this site in your browser settings, or use Tap to place.":err&&err.code===3?'GPS timed out. Step into open sky, or use Tap to place.':"Couldn't get a GPS fix. Use Tap to place.";
+  if(err&&err.code===3&&lastFixAt)return;stopGps();showHint(msg,6000);
+}
+
+// ---------- selection sheet ----------
+const sheet=document.getElementById('sheet');
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function showSheet(it){
+  const col=colorOf(it),L=bestLeg(youField,it),m=mins(L.d),meters=Math.round(L.d*M_PER_UNIT);
+  const pills=['<span class="pill" style="--c:'+col+'">'+esc(it.type)+'</span>'];
+  if(it.section)pills.push('<span class="pill">'+esc(it.section)+'</span>');
+  if(it.h)pills.push('<span class="pill">'+it.h+' in min</span>');
+  if(it.fl)pills.push('<span class="pill">Fast Lane</span>');
+  if(it.status==='new')pills.push('<span class="pill" style="--c:var(--accent)">New 2026</span>');
+  if(it.status==='closed')pills.push('<span class="pill" style="--c:var(--closed)">Closed</span>');
+  if(it.status==='check')pills.push('<span class="pill" style="--c:var(--gold)">Check app</span>');
+  const inPlan=plan.includes(it.id),isDone=done.has(it.id);
+  const acts=it.status==='closed'?'':'<div class="acts"><button type="button" class="btn small'+(inPlan?' on':'')+'" data-a="plan">'+(inPlan?'In my plan':'Add to plan')+'</button>'+
+    (it.kind==='ride'?'<button type="button" class="btn small ghost'+(isDone?' on':'')+'" data-a="done">'+(isDone?'Ridden':'Mark ridden')+'</button>':'')+'</div>';
+  sheet.innerHTML='<div class="top"><h3>'+esc(it.name)+'</h3><button class="x" type="button" aria-label="Close">&times;</button></div>'+
+    '<div class="meta"><span class="pill" style="--c:var(--you)">'+(meters<25?'Right here':m+' min walk, '+meters+' m')+'</span>'+pills.join('')+'</div><p>'+esc(it.blurb)+'</p>'+acts;
+  sheet.querySelector('.x').onclick=()=>select(null);
+  const pb=sheet.querySelector('[data-a="plan"]');if(pb)pb.onclick=()=>{togglePlan(it.id);showSheet(it)};
+  const db=sheet.querySelector('[data-a="done"]');if(db)db.onclick=()=>{toggleDone(it.id);showSheet(it)};
+  sheet.hidden=false;
+}
+function select(id,fly=true){
+  selected=id;
+  if(!id){sheet.hidden=true;drawRoute();relayout();return}
+  const it=byId[id],f=FILTERS.find(x=>x.k===filter);
+  if(!f.test(it)&&!plan.includes(id))setFilter(it.kind==='ride'?'rides':it.kind,false);
+  showSheet(it);drawRoute();
+  if(fly){setFollow(false);const p=it.pts[0],s=size();centerOn(p[0],p[1]+vb.w*s.h/s.w*0.18,Math.min(vb.w,2400),true)}
+  relayout();
+}
+
+// ---------- plan: shortest walking order ----------
+let optimized={order:[],pts:[],legs:[],total:0,at:{}};
+function recomputePlan(){
+  const todo=plan.filter(id=>!done.has(id)&&byId[id].status!=='closed');
+  if(!todo.length){optimized={order:[],pts:[],legs:[],total:0,at:{}};return}
+  // pick each stop's nearest entrance point from you, then distance matrix over graph
+  const stops=todo.map(id=>({id,sn:bestLeg(youField,byId[id]).sn}));
+  const fields=stops.map(s=>field(s.sn.p));
+  const n=stops.length,d0=stops.map(s=>legTo(youField,s.sn).d),Dm=stops.map((s,i)=>stops.map((t,j)=>i===j?0:legTo(fields[i],t.sn).d));
+  // nearest neighbour, then 2-opt on the open path
+  let order=[],left=new Set(stops.map((_,i)=>i)),cur=-1;
+  while(left.size){let b=-1,bd=Infinity;left.forEach(j=>{const d=cur<0?d0[j]:Dm[cur][j];if(d<bd){bd=d;b=j}});order.push(b);left.delete(b);cur=b}
+  const cost=o=>o.reduce((s,j,k)=>s+(k?Dm[o[k-1]][j]:d0[j]),0);
+  let improved=true,best=cost(order);
+  while(improved){improved=false;for(let i=0;i<n-1;i++)for(let k=i+1;k<n;k++){const o=order.slice(0,i).concat(order.slice(i,k+1).reverse(),order.slice(k+1));const c=cost(o);if(c+1e-6<best){best=c;order=o;improved=true}}}
+  const pts=[],legs=[],at={};
+  order.forEach((j,k)=>{const F=k?fields[order[k-1]]:youField;const r=routeTo(F,stops[j].sn);legs.push(r.d);(k?r.pts.slice(1):r.pts).forEach(p=>pts.push(p));at[stops[j].id]=stops[j].sn.p});
+  optimized={order:order.map(j=>stops[j].id),pts,legs,total:best,at};
+}
+function savePlan(){store.set('sfot-plan',plan);store.set('sfot-done',[...done])}
+function togglePlan(id){plan=plan.includes(id)?plan.filter(x=>x!==id):plan.concat(id);savePlan();recomputePlan();renderPlan();drawRoute();relayout()}
+function toggleDone(id){done.has(id)?done.delete(id):done.add(id);savePlan();recomputePlan();renderPlan();renderList();drawRoute();relayout()}
+function renderPlan(){
+  const body=document.getElementById('planBody'),stats=document.getElementById('planStats'),btns=document.getElementById('planBtns'),note=document.getElementById('planNote');
+  const credits=items.filter(isCredit),got=credits.filter(it=>done.has(it.id)).length;
+  const left=optimized.order.length,walk=optimized.total?mins(optimized.total):0;
+  stats.innerHTML='<div><b>'+got+'/'+credits.length+'</b><span>Coasters ridden</span></div><div><b>'+left+'</b><span>Stops left</span></div><div><b>'+walk+'<small style="font-size:14px"> min</small></b><span>Walking</span></div>';
+  note.textContent=left>1?'Shortest walking order from you':'';
+  btns.innerHTML='';
+  const mk=(t,cls,fn)=>{const b=document.createElement('button');b.type='button';b.className='btn small '+cls;b.textContent=t;b.onclick=fn;btns.appendChild(b)};
+  if(!plan.length){
+    body.innerHTML='<p class="empty">Tap a ride and hit <b>Add to plan</b>. I\'ll put your stops in the shortest walking order and draw the route.</p>';
+    mk('Plan every coaster','',()=>{plan=credits.map(it=>it.id);savePlan();recomputePlan();renderPlan();showPlanRoute=true;store.set('sfot-showplan',true);select(null);drawRoute();relayout();mk2()});
+    return;
+  }
+  const doneIds=plan.filter(id=>done.has(id)||byId[id].status==='closed');
+  const ul=document.createElement('ul');ul.className='plan';
+  optimized.order.concat(doneIds).forEach((id,k)=>{
+    const it=byId[id],isDone=done.has(id),li=document.createElement('li');li.className=isDone?'isdone':'';
+    const leg=k<optimized.order.length?mins(optimized.legs[k])+' min walk':isDone?'Ridden':'Closed';
+    li.innerHTML='<span class="num">'+(k<optimized.order.length?k+1:'\u2713')+'</span><span style="min-width:0"><button type="button" class="nm">'+esc(it.name)+'</button><small>'+esc(it.section)+', '+leg+'</small></span><span class="ck">'+
+      (it.kind==='ride'?'<button type="button" class="'+(isDone?'on':'')+'" data-a="d">'+(isDone?'Ridden':'Ridden?')+'</button>':'')+'<button type="button" data-a="x" aria-label="Remove from plan">&#10005;</button></span>';
+    li.querySelector('.nm').onclick=()=>goTo(id);
+    const d=li.querySelector('[data-a="d"]');if(d)d.onclick=()=>toggleDone(id);
+    li.querySelector('[data-a="x"]').onclick=()=>togglePlan(id);
+    ul.appendChild(li);
+  });
+  body.innerHTML='';body.appendChild(ul);
+  mk(showPlanRoute?'Hide route on map':'Show route on map','ghost',()=>{showPlanRoute=!showPlanRoute;store.set('sfot-showplan',showPlanRoute);if(showPlanRoute)select(null);renderPlan();drawRoute();relayout()});
+  if(optimized.order.length)mk('Go to next stop','',()=>goTo(optimized.order[0]));
+  mk('Clear plan','ghost',()=>{plan=[];savePlan();recomputePlan();renderPlan();drawRoute();relayout()});
+}
+function mk2(){if(!selected){const s=size();centerOn(4300,2100,Math.min(10000,Math.max(8300,8300*(4800/8300)/(s.h/s.w))),true)}}
+
+// ---------- filters, legend, list ----------
+const chips=document.getElementById('chips');
+FILTERS.forEach(f=>{const b=document.createElement('button');b.type='button';b.className='chip';b.dataset.k=f.k;b.style.setProperty('--c','var('+f.v+')');b.innerHTML='<i></i>'+f.n;b.onclick=()=>setFilter(f.k,true);chips.appendChild(b)});
+function setFilter(k,userAction){
+  filter=k;store.set('sfot-filter',k);chips.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k?'true':'false'));
+  if(userAction&&selected&&!FILTERS.find(x=>x.k===k).test(byId[selected]))select(null);renderList();relayout();
+}
+document.getElementById('legend').innerHTML=Object.values(CAT).map(c=>'<span style="--c:var('+c.v+')"><i></i>'+c.n+'</span>').join('')+
+  '<span style="--c:var(--fright)"><i></i>Fright Fest</span><span style="--c:var(--you)"><i></i>You</span>';
+const list=document.getElementById('list');
+function renderList(){
+  const f=FILTERS.find(x=>x.k===filter);
+  const rows=items.filter(f.test).map(it=>({it,d:bestLeg(youField,it).d})).sort((a,b)=>(a.it.status==='closed')-(b.it.status==='closed')||a.d-b.d);
+  document.getElementById('listTitle').textContent=f.k==='rides'?'Closest to you':f.n+', closest first';
+  document.getElementById('listNote').textContent=rows.length+' places';list.innerHTML='';
+  rows.forEach(({it,d})=>{
+    const li=document.createElement('li'),b=document.createElement('button');b.type='button';
+    b.className='row'+(it.status==='closed'?' isclosed':'');b.style.setProperty('--c',colorOf(it));
+    const extra=it.status==='new'?' <span class="new">NEW</span>':it.status==='check'?' <span class="new" style="color:var(--gold)">CHECK APP</span>':done.has(it.id)?' <span class="new" style="color:var(--family)">RIDDEN</span>':'';
+    const t=d*M_PER_UNIT<25?'here':mins(d)+' min';
+    b.innerHTML='<i></i><span style="min-width:0"><b>'+esc(it.name)+extra+'</b><small>'+esc(it.section||'')+', '+esc(it.type.toLowerCase())+'</small></span><span class="r">'+(it.status==='closed'?'closed':t)+(it.h?'<em>'+it.h+' in</em>':'')+'</span>';
+    b.onclick=()=>goTo(it.id);li.appendChild(b);list.appendChild(li);
+  });
+}
+function goTo(id){select(id,true);document.getElementById('mapbox').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'})}
+
+// ---------- Fright Fest, ladder, facts, status ----------
+const ffg=document.getElementById('ffgrid');
+[['h','Haunted houses (pass)'],['z','Scare zones (free)'],['s','Shows (free)']].forEach(([k,n])=>{
+  const d=document.createElement('div');d.innerHTML='<h3>'+n+'</h3>';const ul=document.createElement('ul');
+  items.filter(it=>it.kind==='ff'&&it.ff===k).forEach(it=>{const li=document.createElement('li'),b=document.createElement('button');b.type='button';b.textContent=it.name;b.onclick=()=>goTo(it.id);li.appendChild(b);ul.appendChild(li)});
+  d.appendChild(ul);ffg.appendChild(d);
+});
+const LADDER=[['Texas SkyScreamer',400,'--thrill'],['Tormenta Rampaging Run',309,'--coaster'],['Statue of Liberty',305,null],['Oil Derrick',300,'--family'],['Titan',245,'--coaster'],['Mr. Freeze',218,'--coaster'],['The Joker (lift)',120,'--coaster'],['Runaway Mountain',65,'--coaster']];
+document.getElementById('ladder').innerHTML=LADDER.map(([n,ft,v])=>'<div class="lr"><span>'+esc(n)+'</span><div class="bar'+(v?'':' ref')+'" style="width:'+(ft/400*100).toFixed(1)+'%;'+(v?'--c:var('+v+')':'')+'">'+ft+' ft</div></div>').join('');
+const FACTS=[
+ ['El Aserradero',"The world's first log flume opened here in 1963, a few steps from the bull. Arrow built it, then built log flumes for parks everywhere."],
+ ['Tormenta Rampaging Run','Its 309 ft height needed FAA paperwork because DFW Airport is so close. The bull statue is the ride\'s "hero."'],
+ ['Runaway Mine Train',"The first mine train coaster ever, from 1966. Every mine train you've ridden descends from this one."],
+ ['New Texas Giant','When RMC put steel track on this wooden coaster in 2011, it started a new kind of coaster that parks still copy.'],
+ ['Mr. Freeze','Two trains, two directions: one launches you forward, the other launches you backward.'],
+ ['Oil Derrick','A 300 ft oil derrick you can ride to the top. Go at sunset for the view over Tormenta and Arlington.'],
+ ['Six Flags Museum','This is the first Six Flags park (1961). The museum tells how the whole chain started here.'],
+ ['USA Refresh Station','Here for the Coke event? Refresh Stations sell drinks and refill bottles. There are four around the park.']
+];
+const fu=document.getElementById('facts');
+FACTS.forEach(([name,text])=>{const it=items.find(x=>x.name===name),li=document.createElement('li');
+  li.innerHTML='<button type="button">'+esc(name==='USA Refresh Station'?'Coke refills':name)+'</button><span>'+esc(text)+'</span>';li.querySelector('button').onclick=()=>goTo(it.id);fu.appendChild(li)});
+function tick(){
+  const now=new Date(),st=document.getElementById('status');const toH=(h,m)=>{const t=new Date(now);t.setHours(h,m,0,0);return(t-now)/60000};
+  const fmt=m=>m>=60?Math.floor(m/60)+'h '+Math.round(m%60)+'m':Math.round(m)+'m';
+  const today=now.getFullYear()===2026&&now.getMonth()===9&&now.getDate()===17;
+  const houses=toH(18,0),sunset=toH(18,57);
+  let s=houses>0?'Haunted houses open in '+fmt(houses):'<b>Haunted houses are open</b>';
+  if(today)s+=sunset>0?', sunset in '+fmt(sunset):', the sun is down';
+  if(gpsOn&&lastFixAt){const a=Math.round((Date.now()-lastFixAt)/1000);s+=', GPS fix '+(a<5?'just now':a+'s ago')}
+  st.innerHTML=s;
+}
+
+new ResizeObserver(()=>{const cx=vb.x+vb.w/2,cy=vb.y+vb.h/2;const s=size();vb.h=vb.w*s.h/s.w;vb.x=cx-vb.w/2;vb.y=cy-vb.h/2;apply()}).observe(svg);
+updateHere();recomputePlan();renderPlan();setFilter(filter,false);drawRoute();initialView();tick();setInterval(tick,5000);
+})();
+</script>
+</body></html>
