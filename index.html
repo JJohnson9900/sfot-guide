@@ -27,10 +27,11 @@
   --coaster:#FF6B4A; --thrill:#B48CFF; --family:#3CC7AE; --kids:#FF7FB4; --water:#5AB0FF;
   --fright:#FF8F3D; --food:#E0B050; --help:#9AA8B6; --closed:#5E5870;
   --area-op:.3; color-scheme:dark}
+html,body{height:100%}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 40px}
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;flex-direction:column;overflow:hidden}
 .wrap{max-width:1180px;margin:0 auto;display:grid;gap:18px}
 @media (min-width:920px){.wrap{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);align-items:start}
   .mapcol{position:sticky;top:12px}}
@@ -59,7 +60,30 @@ button:focus-visible,.row:focus-visible{outline:3px solid var(--accent);outline-
 .chip i{width:9px;height:9px;border-radius:50%;background:var(--c)}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
-.mapbox{position:relative;background:var(--map);border:1px solid var(--line);border-radius:18px;overflow:hidden;height:min(64vh,600px);min-height:340px}
+.app{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px;width:100%;max-width:1180px;margin:0 auto}
+.topbar{display:flex;gap:8px;position:relative;z-index:6}
+.search{position:relative;flex:1;min-width:0}
+.sicon{position:absolute;left:13px;top:13px;width:20px;height:20px;color:var(--muted);pointer-events:none}
+#q{width:100%;height:46px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:16px;padding:0 40px 0 42px;-webkit-appearance:none;appearance:none}
+#q::-webkit-search-cancel-button{display:none}
+#q:focus{outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent);outline-offset:0;border-color:var(--accent)}
+.qclear{position:absolute;right:6px;top:7px;width:32px;height:32px;border:0;border-radius:50%;background:transparent;color:var(--muted);font-size:22px;line-height:1}
+.results{position:absolute;top:52px;left:0;right:0;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 34px rgba(0,0,0,.2);max-height:min(62vh,460px);overflow:auto;padding:6px;display:grid;gap:1px}
+.res{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;border:0;background:transparent;border-radius:10px;padding:9px 8px}
+.res:hover,.res.hl{background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.res i{width:12px;height:12px;border-radius:50%}
+.res b{display:block;font-size:15px}
+.res small{display:block;color:var(--muted);font-size:13px}
+.res .rm{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;color:var(--muted)}
+.rhead{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 8px 2px}
+.noresult{padding:12px 10px;color:var(--muted);font-size:14px}
+.gps{height:46px;border-radius:14px;border:0;padding:0 16px;background:var(--ink);color:var(--bg);font-weight:700;font-size:15px;display:inline-flex;align-items:center;gap:7px;flex:none}
+.gps::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--you);box-shadow:0 0 0 3px color-mix(in srgb,var(--you) 35%,transparent)}
+.gps.on{background:var(--you);color:#1a1405}
+.gps.on::before{background:#1a1405;box-shadow:none}
+.planpill{position:absolute;left:12px;bottom:44px;border:0;border-radius:999px;background:var(--ink);color:var(--bg);font-weight:700;font-size:13px;padding:8px 14px;box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.attrib{position:absolute;right:8px;bottom:6px;font-size:10px;color:var(--muted);pointer-events:none}
+.mapbox{position:relative;background:var(--map);border:1px solid var(--line);border-radius:18px;overflow:hidden;flex:1;min-height:300px}
 #map{width:100%;height:100%;display:block;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
 #map.moving{cursor:grabbing}
 #map.placing{cursor:crosshair}
@@ -99,7 +123,7 @@ button:focus-visible,.row:focus-visible{outline:3px solid var(--accent);outline-
 .zoom button.me{font-size:12px;font-family:var(--mono)}
 .zoom button.on{background:var(--you);color:#1a1405;border-color:var(--you)}
 .hint{position:absolute;left:10px;top:10px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:13px;color:var(--ink);max-width:calc(100% - 80px)}
-.sheet{position:absolute;left:10px;right:10px;bottom:10px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:0 10px 30px rgba(0,0,0,.18);display:grid;gap:8px;max-height:60%;overflow:auto}
+.sheet{position:absolute;left:10px;right:10px;bottom:10px;z-index:4;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:0 10px 30px rgba(0,0,0,.18);display:grid;gap:8px;max-height:60%;overflow:auto}
 .sheet .top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
 .sheet h3{margin:0;font-size:18px;line-height:1.2}
 .sheet .meta{display:flex;flex-wrap:wrap;gap:6px;font-size:13px}
@@ -144,123 +168,46 @@ button:focus-visible,.row:focus-visible{outline:3px solid var(--accent);outline-
 .empty{color:var(--muted);font-size:15px}
 ol.steps{margin:0;padding-left:22px;display:grid;gap:8px}
 ol.steps li::marker{font-family:var(--display);color:var(--accent)}
-.ladder{display:grid;gap:7px}
-.ladder .lr{display:grid;grid-template-columns:minmax(0,9.5em) minmax(0,1fr);gap:10px;align-items:center;font-size:14px}
-.ladder .lr span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ladder .bar{height:16px;border-radius:0 5px 5px 0;background:var(--c,var(--muted));display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-family:var(--mono);font-size:11px;color:var(--card);min-width:42px}
-.ladder .bar.ref{background:transparent;border:1.5px dashed var(--muted);color:var(--muted)}
-.facts{display:grid;gap:10px;margin:0;padding:0;list-style:none}
-.facts li{display:grid;gap:2px}
-.facts button{all:unset;cursor:pointer;font-weight:700;color:var(--accent);text-decoration:underline;text-underline-offset:3px}
-.facts button:focus-visible{outline:3px solid var(--accent)}
 .changes{display:grid;gap:8px;margin:0;padding:0;list-style:none}
 .changes li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:baseline}
 .tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-radius:5px;padding:2px 6px;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c);white-space:nowrap}
-.ffgrid{display:grid;gap:12px}
-@media (min-width:560px){.ffgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.ffgrid h3{margin:0 0 4px;font-size:14px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:500}
-.ffgrid ul{margin:0;padding:0;list-style:none;display:grid;gap:4px;font-size:14px}
-.ffgrid button{all:unset;cursor:pointer;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--fright) 60%,transparent);text-underline-offset:3px}
-.ffgrid button:focus-visible{outline:2px solid var(--fright)}
-.note{font-size:13px;color:var(--muted)}
+@media (min-width:560px){.note{font-size:13px;color:var(--muted)}
 footer{font-size:12px;color:var(--muted);display:grid;gap:4px}
 footer a{color:var(--muted)}
 .new{color:var(--accent);font-family:var(--mono);font-size:11px;letter-spacing:.06em}
 </style>
 
-<div class="wrap">
-  <div class="mapcol">
-    <header>
-      <div class="eyebrow">Arlington TX, Saturday Oct 17 2026</div>
-      <h1>Six Flags Over Texas</h1>
-      <p class="sub">Tap anything for the walking route. Times follow the park's real paths from wherever you are.</p>
-      <div class="herebar">
-        <span class="herechip"><i></i><span id="hereText">You: Spain, at the Tormenta bull</span></span>
-        <button class="btn" id="gpsBtn" type="button">Live GPS</button>
-        <button class="btn ghost" id="moveBtn" type="button">Tap to place</button>
-      </div>
-      <div class="status" id="status"></div>
-    </header>
-
-    <div class="chips" id="chips" role="toolbar" aria-label="Show on map"></div>
-
-    <div class="mapbox" id="mapbox">
+<div class="app">
+  <div class="topbar">
+    <div class="search">
+      <svg class="sicon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="2.2"></circle><path d="M13 13l5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path></svg>
+      <input id="q" type="search" placeholder="Search rides, food, restrooms&hellip;" autocomplete="off" enterkeyhint="search" aria-label="Search the park">
+      <button type="button" id="qclear" class="qclear" aria-label="Clear search" hidden>&times;</button>
+      <div class="results" id="results" hidden></div>
+    </div>
+    <button class="gps" id="gpsBtn" type="button">GPS</button>
+  </div>
+  <div class="chips" id="chips" role="toolbar" aria-label="Show on map"></div>
+  <div class="mapbox" id="mapbox">
       <svg id="map" xmlns="http://www.w3.org/2000/svg" aria-label="Park map">
         <defs><pattern id="grain" class="grain" width="80" height="80" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="6"></circle><circle cx="60" cy="60" r="6"></circle></pattern></defs><path id="shadow2" class="shadow" transform="translate(0,90)"></path><path id="shadow1" class="shadow" transform="translate(0,40)"></path><path id="creek" class="creek"></path><g id="areas"></g><path id="areaTex" fill="url(#grain)"></path><path id="lake" class="lake"></path><path id="walkCase" class="walkcase"></path><path id="walks" class="walk"></path><g id="alabels"></g>
         <path id="routeHalo"></path><path id="route"></path>
         <g id="sky"></g><g id="marks"></g><g id="badges"></g>
         <g id="you"><circle class="acc" r="0"></circle><path class="cone" d=""></path><circle class="ring" r="1"></circle><circle class="core" r="1"></circle></g>
       </svg>
-      <div class="hint" id="hint" hidden></div>
-      <div class="scale" aria-hidden="true"><div class="north"><svg viewBox="0 0 14 18"><path d="M7 0L13 14L7 11L1 14Z"></path></svg>N</div><div><div class="bar" id="scaleBar"></div><span id="scaleTxt">100 m</span></div></div>
-      <div class="zoom">
-        <button type="button" id="zin" aria-label="Zoom in">+</button>
-        <button type="button" id="zout" aria-label="Zoom out">&minus;</button>
-        <button type="button" id="zme" class="me" aria-label="Center on me">ME</button>
-        <button type="button" id="zall" class="me" aria-label="Show whole park">ALL</button>
-        <button type="button" id="zout2" class="me" aria-label="Route to the exit">OUT</button>
-      </div>
-      <div class="sheet" id="sheet" hidden aria-live="polite"></div>
+    <div class="hint" id="hint" hidden></div>
+    <button type="button" class="planpill" id="planPill" hidden></button>
+    <div class="scale" aria-hidden="true"><div class="north"><svg viewBox="0 0 14 18"><path d="M7 0L13 14L7 11L1 14Z"></path></svg>N</div><div><div class="bar" id="scaleBar"></div><span id="scaleTxt">100 m</span></div></div>
+    <div class="attrib">Map data: Guide to SFOT, &copy; OpenStreetMap</div>
+    <div class="zoom">
+      <button type="button" id="zin" aria-label="Zoom in">+</button>
+      <button type="button" id="zout" aria-label="Zoom out">&minus;</button>
+      <button type="button" id="zme" class="me" aria-label="Center on me">ME</button>
+      <button type="button" id="zall" class="me" aria-label="Show whole park">ALL</button>
+      <button type="button" id="zout2" class="me" aria-label="Route to the exit">EXIT</button>
+      <button type="button" id="moveBtn" class="me" aria-label="Set where you are by tapping the map">SET</button>
     </div>
-    <div class="legend" id="legend"></div>
-  </div>
-
-  <div class="infocol">
-    <section class="panel" id="planPanel">
-      <div class="phead"><h2>My plan</h2><span class="note" id="planNote"></span></div>
-      <div class="stat" id="planStats"></div>
-      <div id="planBody"></div>
-      <div class="btnrow" id="planBtns"></div>
-    </section>
-
-    <section class="panel">
-      <div class="phead"><h2 id="listTitle">Closest to you</h2><span class="note" id="listNote"></span></div>
-      <ul class="list" id="list"></ul>
-    </section>
-
-    <section class="panel">
-      <h2>How high you'll go</h2>
-      <div class="ladder" id="ladder"></div>
-      <p class="note">Drawn to scale. The Statue of Liberty (base to torch) is there for size.</p>
-    </section>
-
-    <section class="panel night">
-      <h2>Fright Fest</h2>
-      <p>Select nights through Nov 1, so check the app for tonight's hours. Haunted houses open at 6 pm and need a Haunted Attractions Pass (from $30 for one night). Scare zones and shows come free with admission. <b>The Awakening</b> opens the night at the front gate at 7 pm.</p>
-      <div class="ffgrid" id="ffgrid"></div>
-      <p class="note">Amor Eterno, a Día de los Muertos show, also runs; the guides don't say where. Fright Fest isn't recommended for kids under 13.</p>
-    </section>
-
-    <section class="panel">
-      <h2>What changed in 2026</h2>
-      <ul class="changes">
-        <li><span class="tag" style="--c:var(--coaster)">New</span><span><b>Tormenta Rampaging Run</b> opened July 9. 309 ft, 87 mph, the tallest and fastest coaster in Texas and the first "giga" dive coaster anywhere. It took the land of La Vibora, El Diablo and the Conquistador ship.</span></li>
-        <li><span class="tag" style="--c:var(--closed)">Closed</span><span><b>Shock Wave</b> ran opening weekend in March, then shut. The park pulled it from the app and coaster list in June. The 1978 coaster still stands, but nothing's announced.</span></li>
-        <li><span class="tag" style="--c:var(--gold)">Check</span><span><b>Mini Mine Train</b> was reported closed in April, and <b>Rodeo</b> shows mixed status online. Check the Six Flags app before walking over.</span></li>
-        <li><span class="tag" style="--c:var(--fright)">Fright Fest</span><span>New this year: the <b>Día de los Muertos</b> scare zone in Mexico (right next to you), <b>Doc Varnum's Hybrid Hell Pit</b> in the Texas Arena, and the <b>Wake the Dead</b> murder-mystery show.</span></li>
-        <li><span class="tag" style="--c:var(--help)">Policy</span><span>The park is fully cashless (kiosks turn cash into a prepaid card). Guests 17 and under need a chaperone 21 or older.</span></li>
-      </ul>
-    </section>
-
-    <section class="panel">
-      <h2>How to beat the lines</h2>
-      <ol class="steps">
-        <li><b>Ride the newest thing first.</b> Tormenta's line only grows after lunch, and you're standing at it.</li>
-        <li><b>Go against the crowd.</b> Most people turn right at the front gate. From Spain, head west into Texas for New Texas Giant and Titan while the east side fills up.</li>
-        <li><b>Save Gotham for the haunt hours.</b> Once the houses open at 6 pm, ride lines thin out. Mr. Freeze, Batman and The Joker are right beside two houses.</li>
-        <li><b>Eat off-peak.</b> Lunch before 11:30 or after 1:30. Casa de las Banderas in Mexico is the closest real meal to you.</li>
-      </ol>
-    </section>
-
-    <section class="panel">
-      <h2>Cool stuff nearby</h2>
-      <ul class="facts" id="facts"></ul>
-    </section>
-
-    <footer>
-      <span>Map positions from the fan-run Guide to SFOT map (Aug 2026), tied to GPS with 15 OpenStreetMap landmarks (typical error about 6 m). Walking times assume an easy 75 m per minute along traced main paths, so add time for crowds. Live ride status is only in the Six Flags app.</span>
-      <span>Sources: <a href="https://guidetosfot.com/parkinfo/map/" target="_blank" rel="noopener">Guide to SFOT map</a>, <a href="https://www.openstreetmap.org/#map=17/32.7565/-97.0705" target="_blank" rel="noopener">OpenStreetMap</a>, <a href="https://en.wikipedia.org/wiki/List_of_Six_Flags_Over_Texas_attractions" target="_blank" rel="noopener">Wikipedia attractions list</a>, <a href="https://en.wikipedia.org/wiki/Tormenta_Rampaging_Run" target="_blank" rel="noopener">Tormenta Rampaging Run</a>, <a href="https://screamscape.com/html/six_flags_over_texas.htm" target="_blank" rel="noopener">ScreamScape</a>, <a href="https://thrillzing.com/seasonal-events/fright-fest-2026-six-flags-over-texas/" target="_blank" rel="noopener">Thrillzing Fright Fest 2026</a>.</span>
-    </footer>
+    <div class="sheet" id="sheet" hidden aria-live="polite"></div>
   </div>
 </div>
 
@@ -356,7 +303,7 @@ const FF=[
  ['EverSmile Industries',6461,3075,'h','A retro-futuristic factory tour, Majestic Theatre.'],
  ['Terror at the Polynesian Palm',3712,2635,'h','A haunted abandoned resort near the Crazy Horse Saloon.'],
  ["Doc Varnum's Hybrid Hell Pit",4520,3944,'h','New premium sideshow zone in the Texas Arena. Needs the pass.'],
- ['Día de los Muertos',4109,1981,'z','New scare zone in Mexico, right by you.'],
+ ['D\u00eda de los Muertos',4109,1981,'z','New scare zone in Mexico, right by you.'],
  ["Outlaw's Revenge",3509,2430,'z','Undead outlaws roam Texas.'],
  ['Plague',3557,3099,'z','Fog and masked plague doctors.'],
  ['The Last Harvest',4485,2195,'z','Scarecrows at the front gate.'],
@@ -573,7 +520,7 @@ function centerOn(x,y,w,animate){
   const from={...vb},t0=performance.now(),D=380;
   (function step(t){const k=Math.min(1,(t-t0)/D),e=1-Math.pow(1-k,3);vb.w=from.w+(target.w-from.w)*e;vb.x=from.x+(target.x-from.x)*e;vb.y=from.y+(target.y-from.y)*e;apply();if(k<1)requestAnimationFrame(step)})(t0);
 }
-function initialView(){const s=size();const w=Math.min(Math.max(s.w*9.5,3200),8600);if(w>=6200)centerOn(4000,2560,w);else centerOn(you[0]+200,you[1]-600,w)}
+function initialView(){const s=size();const w=Math.min(Math.max(s.w*9.5,3200),8600);if(w>=6200)centerOn(4300,2500,Math.min(10000,Math.max(8300,4800*s.w/s.h)));else centerOn(you[0]+300,you[1]-500,w)}
 function zoomAt(cx,cy,factor){const s=size();const wx=vb.x+(cx-s.r.left)/s.w*vb.w,wy=vb.y+(cy-s.r.top)/s.h*vb.h;
   const nw=Math.min(Math.max(vb.w*factor,450),10000),nh=nw*s.h/s.w;vb.x=wx-(cx-s.r.left)/s.w*nw;vb.y=wy-(cy-s.r.top)/s.h*nh;vb.w=nw;apply()}
 
@@ -609,33 +556,30 @@ document.getElementById('zall').onclick=()=>{setFollow(false);const s=size();con
 // ---------- you, GPS ----------
 const hereText=document.getElementById('hereText'),moveBtn=document.getElementById('moveBtn'),gpsBtn=document.getElementById('gpsBtn'),hint=document.getElementById('hint');
 function setYou(p,save){you=p;youField=field(you);if(save)store.set('sfot-you2',you);updateHere();recomputePlan();renderList();drawRoute();relayout();if(selected)showSheet(byId[selected])}
-function updateHere(){
-  const atDefault=hyp(you,DEFAULT_YOU)<1;
-  hereText.textContent=gpsOn&&lastFixAt?'You (GPS): '+sectionAt(you[0],you[1]):atDefault?'You: Spain, at the Tormenta bull':'You: '+sectionAt(you[0],you[1]);
-}
+function updateHere(){}
 function showHint(t,ms){hint.textContent=t;hint.hidden=!t;clearTimeout(showHint.t);if(t&&ms)showHint.t=setTimeout(()=>{hint.hidden=true},ms)}
-function setPlacing(on){placing=on;svg.classList.toggle('placing',on);moveBtn.classList.toggle('on',on);moveBtn.textContent=on?'Tap the map\u2026':'Tap to place';showHint(on?'Tap the map where you are now':'')}
-moveBtn.onclick=()=>{if(gpsOn)stopGps();setPlacing(!placing);if(placing){select(null);document.getElementById('mapbox').scrollIntoView({block:'nearest'})}};
+function setPlacing(on){placing=on;svg.classList.toggle('placing',on);moveBtn.classList.toggle('on',on);moveBtn.textContent=on?'TAP':'SET';showHint(on?'Tap the map where you are now':'')}
+moveBtn.onclick=()=>{if(gpsOn)stopGps();setPlacing(!placing);if(placing)select(null)};
 function setFollow(on){follow=on&&gpsOn;zme.classList.toggle('on',follow)}
-function stopGps(){if(gpsWatch!=null)try{navigator.geolocation.clearWatch(gpsWatch)}catch(e){}gpsWatch=null;gpsOn=false;lastFixAt=0;gpsHeading=null;setFollow(false);gpsBtn.classList.remove('on');gpsBtn.textContent='Live GPS';updateHere();relayout()}
-gpsBtn.onclick=()=>{
-  if(gpsOn){stopGps();showHint('GPS off. Your dot stays where it was.',2500);return}
-  if(!('geolocation' in navigator)){showHint("This browser can't share location. Use Tap to place.",5000);return}
-  setPlacing(false);gpsOn=true;gpsBtn.classList.add('on');gpsBtn.textContent='Finding you\u2026';showHint('Asking for your location\u2026');
+function stopGps(){if(gpsWatch!=null)try{navigator.geolocation.clearWatch(gpsWatch)}catch(e){}gpsWatch=null;gpsOn=false;lastFixAt=0;gpsHeading=null;setFollow(false);gpsBtn.classList.remove('on');gpsBtn.textContent='GPS';updateHere();relayout()}
+gpsBtn.onclick=()=>{if(gpsOn){stopGps();showHint('GPS off. Your dot stays where it was.',2500);return}startGps()};
+function startGps(){
+  if(!('geolocation' in navigator)){showHint("This browser can't share location. Tap SET, then tap the map.",5000);return}
+  setPlacing(false);gpsOn=true;gpsBtn.classList.add('on');gpsBtn.textContent='GPS\u2026';showHint('Finding you\u2026');
   try{gpsWatch=navigator.geolocation.watchPosition(onFix,onGpsErr,{enableHighAccuracy:true,maximumAge:3000,timeout:20000})}catch(e){onGpsErr({code:1})}
-};
+}
 function onFix(pos){
   const c=pos.coords,p=ll2map(c.latitude,c.longitude);
   if(p[0]<-800||p[0]>8800||p[1]<-800||p[1]>5800){gpsBtn.textContent='GPS on';showHint("GPS puts you outside the park, so your dot stays put.",5000);return}
   const first=!lastFixAt;lastFixAt=Date.now();gpsAcc=c.accuracy||0;gpsHeading=(c.speed>0.5&&c.heading!=null&&!isNaN(c.heading))?c.heading:null;
-  gpsBtn.textContent='GPS on';showHint(gpsAcc>40?'GPS is rough here (±'+Math.round(gpsAcc)+' m). It sharpens in open sky.':'',4000);
+  gpsBtn.textContent='GPS on';showHint(gpsAcc>40?'GPS is rough here (\u00b1'+Math.round(gpsAcc)+' m). It sharpens in open sky.':'',4000);
   setYou(p,true);if(first)setFollow(true);
   if(follow){const s=size();vb.x=you[0]-vb.w/2;vb.y=you[1]-vb.w*s.h/s.w/2;apply()}
 }
 const LIVE_URL='https://jjohnson9900.github.io/sfot-guide/';
 function onGpsErr(err){
-  if(err&&err.code===1&&location.hostname.indexOf('github.io')<0){stopGps();hint.innerHTML='Location is blocked in this viewer. For live GPS open <a href="'+LIVE_URL+'" target="_blank" rel="noopener" style="color:var(--accent);font-weight:700">jjohnson9900.github.io/sfot-guide</a>, or use Tap to place.';hint.hidden=false;clearTimeout(showHint.t);showHint.t=setTimeout(()=>{hint.hidden=true},12000);return}
-  const msg=err&&err.code===1?"Location is blocked. Allow location for this site in your browser settings, or use Tap to place.":err&&err.code===3?'GPS timed out. Step into open sky, or use Tap to place.':"Couldn't get a GPS fix. Use Tap to place.";
+  if(err&&err.code===1&&location.hostname.indexOf('github.io')<0){stopGps();hint.innerHTML='Location is blocked in this viewer. For live GPS open <a href="'+LIVE_URL+'" target="_blank" rel="noopener" style="color:var(--accent);font-weight:700">jjohnson9900.github.io/sfot-guide</a>, or tap SET, then the map.';hint.hidden=false;clearTimeout(showHint.t);showHint.t=setTimeout(()=>{hint.hidden=true},12000);return}
+  const msg=err&&err.code===1?"Location is blocked. Allow location for this site in your browser settings, or tap SET, then the map.":err&&err.code===3?'GPS timed out. Step into open sky, or tap SET, then the map.':"Couldn't get a GPS fix. Tap SET, then tap the map.";
   if(err&&err.code===3&&lastFixAt)return;stopGps();showHint(msg,6000);
 }
 
@@ -656,18 +600,18 @@ function showSheet(it){
     (it.kind==='ride'?'<button type="button" class="btn small ghost'+(isDone?' on':'')+'" data-a="done">'+(isDone?'Ridden':'Mark ridden')+'</button>':'')+'</div>';
   sheet.innerHTML='<div class="top"><h3>'+esc(it.name)+'</h3><button class="x" type="button" aria-label="Close">&times;</button></div>'+
     '<div class="meta"><span class="pill" style="--c:var(--you)">'+(meters<25?'Right here':m+' min walk, '+meters+' m')+'</span>'+pills.join('')+'</div><p>'+esc(it.blurb)+'</p>'+acts;
-  sheet.querySelector('.x').onclick=()=>select(null);
+  sheetMode='item';sheet.querySelector('.x').onclick=()=>select(null);
   const pb=sheet.querySelector('[data-a="plan"]');if(pb)pb.onclick=()=>{togglePlan(it.id);showSheet(it)};
   const db=sheet.querySelector('[data-a="done"]');if(db)db.onclick=()=>{toggleDone(it.id);showSheet(it)};
   sheet.hidden=false;
 }
 function select(id,fly=true){
   selected=id;
-  if(!id){sheet.hidden=true;drawRoute();relayout();return}
+  if(!id){if(sheetMode!=='plan'){sheet.hidden=true;sheetMode=null}drawRoute();relayout();return}
   const it=byId[id],f=FILTERS.find(x=>x.k===filter);
   if(!f.test(it)&&!plan.includes(id))setFilter(it.kind==='ride'?'rides':it.kind,false);
   showSheet(it);drawRoute();
-  if(fly){setFollow(false);const p=it.pts[0],s=size();centerOn(p[0],p[1]+vb.w*s.h/s.w*0.18,Math.min(vb.w,2400),true)}
+  if(fly){setFollow(false);const p=it.pts[0],s=size(),nw=Math.min(vb.w,2400);centerOn(p[0],p[1]+Math.min(nw*s.h/s.w*0.2,700),nw,true)}
   relayout();
 }
 
@@ -693,37 +637,34 @@ function recomputePlan(){
 function savePlan(){store.set('sfot-plan',plan);store.set('sfot-done',[...done])}
 function togglePlan(id){plan=plan.includes(id)?plan.filter(x=>x!==id):plan.concat(id);savePlan();recomputePlan();renderPlan();drawRoute();relayout()}
 function toggleDone(id){done.has(id)?done.delete(id):done.add(id);savePlan();recomputePlan();renderPlan();renderList();drawRoute();relayout()}
+let sheetMode=null;
+const planPill=document.getElementById('planPill');
 function renderPlan(){
-  const body=document.getElementById('planBody'),stats=document.getElementById('planStats'),btns=document.getElementById('planBtns'),note=document.getElementById('planNote');
-  const credits=items.filter(isCredit),got=credits.filter(it=>done.has(it.id)).length;
-  const left=optimized.order.length,walk=optimized.total?mins(optimized.total):0;
-  stats.innerHTML='<div><b>'+got+'/'+credits.length+'</b><span>Coasters ridden</span></div><div><b>'+left+'</b><span>Stops left</span></div><div><b>'+walk+'<small style="font-size:14px"> min</small></b><span>Walking</span></div>';
-  note.textContent=left>1?'Shortest walking order from you':'';
-  btns.innerHTML='';
-  const mk=(t,cls,fn)=>{const b=document.createElement('button');b.type='button';b.className='btn small '+cls;b.textContent=t;b.onclick=fn;btns.appendChild(b)};
-  if(!plan.length){
-    body.innerHTML='<p class="empty">Tap a ride and hit <b>Add to plan</b>. I\'ll put your stops in the shortest walking order and draw the route.</p>';
-    mk('Plan every coaster','',()=>{plan=credits.map(it=>it.id);savePlan();recomputePlan();renderPlan();showPlanRoute=true;store.set('sfot-showplan',true);select(null);drawRoute();relayout();mk2()});
-    return;
-  }
-  const doneIds=plan.filter(id=>done.has(id)||byId[id].status==='closed');
-  const ul=document.createElement('ul');ul.className='plan';
-  optimized.order.concat(doneIds).forEach((id,k)=>{
-    const it=byId[id],isDone=done.has(id),li=document.createElement('li');li.className=isDone?'isdone':'';
-    const leg=k<optimized.order.length?mins(optimized.legs[k])+' min walk':isDone?'Ridden':'Closed';
-    li.innerHTML='<span class="num">'+(k<optimized.order.length?k+1:'\u2713')+'</span><span style="min-width:0"><button type="button" class="nm">'+esc(it.name)+'</button><small>'+esc(it.section)+', '+leg+'</small></span><span class="ck">'+
-      (it.kind==='ride'?'<button type="button" class="'+(isDone?'on':'')+'" data-a="d">'+(isDone?'Ridden':'Ridden?')+'</button>':'')+'<button type="button" data-a="x" aria-label="Remove from plan">&#10005;</button></span>';
-    li.querySelector('.nm').onclick=()=>goTo(id);
-    const d=li.querySelector('[data-a="d"]');if(d)d.onclick=()=>toggleDone(id);
-    li.querySelector('[data-a="x"]').onclick=()=>togglePlan(id);
-    ul.appendChild(li);
-  });
-  body.innerHTML='';body.appendChild(ul);
-  mk(showPlanRoute?'Hide route on map':'Show route on map','ghost',()=>{showPlanRoute=!showPlanRoute;store.set('sfot-showplan',showPlanRoute);if(showPlanRoute)select(null);renderPlan();drawRoute();relayout()});
-  if(optimized.order.length)mk('Go to next stop','',()=>goTo(optimized.order[0]));
-  mk('Clear plan','ghost',()=>{plan=[];savePlan();recomputePlan();renderPlan();drawRoute();relayout()});
+  const left=optimized.order.length;planPill.hidden=!plan.length;
+  if(plan.length)planPill.textContent=left?'My plan: '+left+' stops, '+mins(optimized.total)+' min':'Plan done';
+  if(sheetMode==='plan')showPlanSheet();
 }
-function mk2(){if(!selected){const s=size();centerOn(4300,2100,Math.min(10000,Math.max(8300,8300*(4800/8300)/(s.h/s.w))),true)}}
+function showPlanSheet(){
+  sheetMode='plan';if(selected){selected=null;drawRoute();relayout()}
+  const credits=items.filter(isCredit),got=credits.filter(it=>done.has(it.id)).length;
+  const doneIds=plan.filter(id=>done.has(id)||byId[id].status==='closed');
+  let h='<div class="top"><h3>My plan</h3><button class="x" type="button" aria-label="Close">&times;</button></div><div class="meta"><span class="pill" style="--c:var(--you)">'+got+'/'+credits.length+' coasters ridden</span>'+(optimized.order.length?'<span class="pill">'+mins(optimized.total)+' min walking</span>':'')+'</div><ul class="plan">';
+  optimized.order.concat(doneIds).forEach((id,k)=>{const it=byId[id],isDone=done.has(id),inRoute=k<optimized.order.length;
+    const leg=inRoute?mins(optimized.legs[k])+' min walk':isDone?'Ridden':'Closed';
+    h+='<li class="'+(isDone?'isdone':'')+'"><span class="num">'+(inRoute?k+1:'\u2713')+'</span><span style="min-width:0"><button type="button" class="nm" data-go="'+id+'">'+esc(it.name)+'</button><small>'+esc(it.section)+', '+leg+'</small></span><span class="ck">'+
+      (it.kind==='ride'?'<button type="button" class="'+(isDone?'on':'')+'" data-d="'+id+'">'+(isDone?'Ridden':'Ridden?')+'</button>':'')+'<button type="button" data-x="'+id+'" aria-label="Remove from plan">&#10005;</button></span></li>'});
+  h+='</ul><div class="acts"><button type="button" class="btn small ghost" data-a="route">'+(showPlanRoute?'Hide route':'Show route')+'</button><button type="button" class="btn small ghost" data-a="clear">Clear plan</button></div>';
+  sheet.innerHTML=h;sheet.hidden=false;
+  sheet.querySelector('.x').onclick=()=>{sheetMode=null;sheet.hidden=true};
+  sheet.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>select(b.dataset.go,true));
+  sheet.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>toggleDone(b.dataset.d));
+  sheet.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>togglePlan(b.dataset.x));
+  sheet.querySelector('[data-a="route"]').onclick=()=>{showPlanRoute=!showPlanRoute;store.set('sfot-showplan',showPlanRoute);showPlanSheet();drawRoute();relayout()};
+  sheet.querySelector('[data-a="clear"]').onclick=()=>{plan=[];savePlan();recomputePlan();sheetMode=null;sheet.hidden=true;renderPlan();drawRoute();relayout()};
+}
+planPill.onclick=showPlanSheet;
+function planEveryCoaster(){plan=items.filter(isCredit).map(it=>it.id);savePlan();recomputePlan();showPlanRoute=true;store.set('sfot-showplan',true);select(null);renderPlan();drawRoute();relayout();mk2()}
+function mk2(){const s=size();centerOn(4300,2100,Math.min(10000,Math.max(8300,8300*(4800/8300)/(s.h/s.w))),true)}
 
 // ---------- filters, legend, list ----------
 const chips=document.getElementById('chips');
@@ -732,60 +673,76 @@ function setFilter(k,userAction){
   filter=k;store.set('sfot-filter',k);chips.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k?'true':'false'));
   if(userAction&&selected&&!FILTERS.find(x=>x.k===k).test(byId[selected]))select(null);renderList();relayout();
 }
-document.getElementById('legend').innerHTML=Object.values(CAT).map(c=>'<span style="--c:var('+c.v+')"><i></i>'+c.n+'</span>').join('')+
-  '<span style="--c:var(--fright)"><i></i>Fright Fest</span><span style="--c:var(--you)"><i></i>You</span>';
-const list=document.getElementById('list');
-function renderList(){
-  const f=FILTERS.find(x=>x.k===filter);
-  const rows=items.filter(f.test).map(it=>({it,d:bestLeg(youField,it).d})).sort((a,b)=>(a.it.status==='closed')-(b.it.status==='closed')||a.d-b.d);
-  document.getElementById('listTitle').textContent=f.k==='rides'?'Closest to you':f.n+', closest first';
-  document.getElementById('listNote').textContent=rows.length+' places';list.innerHTML='';
-  rows.forEach(({it,d})=>{
-    const li=document.createElement('li'),b=document.createElement('button');b.type='button';
-    b.className='row'+(it.status==='closed'?' isclosed':'');b.style.setProperty('--c',colorOf(it));
-    const extra=it.status==='new'?' <span class="new">NEW</span>':it.status==='check'?' <span class="new" style="color:var(--gold)">CHECK APP</span>':done.has(it.id)?' <span class="new" style="color:var(--family)">RIDDEN</span>':'';
-    const t=d*M_PER_UNIT<25?'here':mins(d)+' min';
-    b.innerHTML='<i></i><span style="min-width:0"><b>'+esc(it.name)+extra+'</b><small>'+esc(it.section||'')+', '+esc(it.type.toLowerCase())+'</small></span><span class="r">'+(it.status==='closed'?'closed':t)+(it.h?'<em>'+it.h+' in</em>':'')+'</span>';
-    b.onclick=()=>goTo(it.id);li.appendChild(b);list.appendChild(li);
-  });
-}
-function goTo(id){select(id,true);document.getElementById('mapbox').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'})}
+function renderList(){if(!results.hidden)renderResults()}
+function goTo(id){select(id,true)}
 
-// ---------- Fright Fest, ladder, facts, status ----------
-const ffg=document.getElementById('ffgrid');
-[['h','Haunted houses (pass)'],['z','Scare zones (free)'],['s','Shows (free)']].forEach(([k,n])=>{
-  const d=document.createElement('div');d.innerHTML='<h3>'+n+'</h3>';const ul=document.createElement('ul');
-  items.filter(it=>it.kind==='ff'&&it.ff===k).forEach(it=>{const li=document.createElement('li'),b=document.createElement('button');b.type='button';b.textContent=it.name;b.onclick=()=>goTo(it.id);li.appendChild(b);ul.appendChild(li)});
-  d.appendChild(ul);ffg.appendChild(d);
-});
-const LADDER=[['Texas SkyScreamer',400,'--thrill'],['Tormenta Rampaging Run',309,'--coaster'],['Statue of Liberty',305,null],['Oil Derrick',300,'--family'],['Titan',245,'--coaster'],['Mr. Freeze',218,'--coaster'],['The Joker (lift)',120,'--coaster'],['Runaway Mountain',65,'--coaster']];
-document.getElementById('ladder').innerHTML=LADDER.map(([n,ft,v])=>'<div class="lr"><span>'+esc(n)+'</span><div class="bar'+(v?'':' ref')+'" style="width:'+(ft/400*100).toFixed(1)+'%;'+(v?'--c:var('+v+')':'')+'">'+ft+' ft</div></div>').join('');
-const FACTS=[
- ['El Aserradero',"The world's first log flume opened here in 1963, a few steps from the bull. Arrow built it, then built log flumes for parks everywhere."],
- ['Tormenta Rampaging Run','Its 309 ft height needed FAA paperwork because DFW Airport is so close. The bull statue is the ride\'s "hero."'],
- ['Runaway Mine Train',"The first mine train coaster ever, from 1966. Every mine train you've ridden descends from this one."],
- ['New Texas Giant','When RMC put steel track on this wooden coaster in 2011, it started a new kind of coaster that parks still copy.'],
- ['Mr. Freeze','Two trains, two directions: one launches you forward, the other launches you backward.'],
- ['Oil Derrick','A 300 ft oil derrick you can ride to the top. Go at sunset for the view over Tormenta and Arlington.'],
- ['Six Flags Museum','This is the first Six Flags park (1961). The museum tells how the whole chain started here.'],
- ['USA Refresh Station','Here for the Coke event? Refresh Stations sell drinks and refill bottles. There are four around the park.']
-];
-const fu=document.getElementById('facts');
-FACTS.forEach(([name,text])=>{const it=items.find(x=>x.name===name),li=document.createElement('li');
-  li.innerHTML='<button type="button">'+esc(name==='USA Refresh Station'?'Coke refills':name)+'</button><span>'+esc(text)+'</span>';li.querySelector('button').onclick=()=>goTo(it.id);fu.appendChild(li)});
-function tick(){
-  const now=new Date(),st=document.getElementById('status');const toH=(h,m)=>{const t=new Date(now);t.setHours(h,m,0,0);return(t-now)/60000};
-  const fmt=m=>m>=60?Math.floor(m/60)+'h '+Math.round(m%60)+'m':Math.round(m)+'m';
-  const today=now.getFullYear()===2026&&now.getMonth()===9&&now.getDate()===17;
-  const houses=toH(18,0),sunset=toH(18,57);
-  let s=houses>0?'Haunted houses open in '+fmt(houses):'<b>Haunted houses are open</b>';
-  if(today)s+=sunset>0?', sunset in '+fmt(sunset):', the sun is down';
-  if(gpsOn&&lastFixAt){const a=Math.round((Date.now()-lastFixAt)/1000);s+=', GPS fix '+(a<5?'just now':a+'s ago')}
-  st.innerHTML=s;
+// ---------- search everything ----------
+const q=document.getElementById('q'),results=document.getElementById('results'),qclear=document.getElementById('qclear');
+const norm=t=>String(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+function kw(it){
+  const k=[];
+  if(it.kind==='ride'){k.push('ride');if(it.cats.includes('C'))k.push('coaster roller');if(it.cats.includes('T'))k.push('thrill scary big');if(it.cats.includes('F'))k.push('family');if(it.cats.includes('K'))k.push('kids kiddie little');if(it.cats.includes('W'))k.push('water wet splash');if(it.fl)k.push('fast lane')}
+  if(it.kind==='ff')k.push('fright fest halloween haunt haunted house maze scare zone show spooky');
+  if(it.kind==='food')k.push('food eat snack drink lunch dinner');
+  if(it.refresh)k.push('coke coca cola refill soda drink water bottle refresh');
+  if(/Restrooms/.test(it.name))k.push('restroom bathroom toilet wc potty pee');
+  if(/Lockers/.test(it.name))k.push('locker bag storage');
+  if(it.name==='First Aid')k.push('medical nurse hurt injury');
+  if(it.id==='p0')k.push('exit entrance gate leave out front way out');
+  if(it.id==='p1')k.push('help lost found tickets pass accessibility ada info information services');
+  if(it.id==='p2')k.push('car parking lot toll');
+  return k.join(' ');
 }
+items.forEach(it=>{it.nname=norm(it.name);it.hay=norm([it.name,it.type,it.section,kw(it)].join(' '));it.words=it.hay.split(' ')});
+function search(str){
+  const n=norm(str);if(!n)return[];const toks=n.split(' ');
+  return items.map(it=>{let sc=0;
+    if(it.nname.startsWith(n))sc=100;else if(it.nname.includes(n))sc=80;
+    else if(toks.every(t=>it.words.some(w=>w.startsWith(t))))sc=60;else if(toks.every(t=>it.hay.includes(t)))sc=40;
+    return{it,sc}}).filter(r=>r.sc).map(r=>({...r,d:bestLeg(youField,r.it).d})).sort((a,b)=>(a.it.status==='closed')-(b.it.status==='closed')||b.sc-a.sc||a.d-b.d).slice(0,40);
+}
+function nearestOf(pred){return items.filter(pred).map(it=>({it,d:bestLeg(youField,it).d})).sort((a,b)=>a.d-b.d)[0]}
+const away=d=>d*M_PER_UNIT<25?'here':mins(d)+' min';
+function suggestions(){
+  const r=nearestOf(it=>/Restrooms/.test(it.name)),c=nearestOf(it=>it.refresh),e=nearestOf(it=>it.id==='p0'),g=nearestOf(it=>it.id==='p1'),f=nearestOf(it=>it.kind==='food'&&!it.refresh);
+  return[
+    {c:'var(--help)',n:'Nearest restroom',sub:r.it.name,right:away(r.d),go:()=>select(r.it.id,true)},
+    {c:'var(--ink)',n:'Exit',sub:'Main entrance & exit',right:away(e.d),go:()=>select('p0',true)},
+    {c:'var(--ink)',n:'Guest Relations',sub:'Tickets, lost and found, help',right:away(g.d),go:()=>select('p1',true)},
+    {c:'var(--food)',n:'Nearest food',sub:f.it.name,right:away(f.d),go:()=>select(f.it.id,true)},
+    {c:'var(--food)',n:'Coke refills',sub:c.it.name,right:away(c.d),go:()=>select(c.it.id,true)},
+    {c:'var(--coaster)',n:'Plan every coaster',sub:'Shortest walking order from you',right:'',go:planEveryCoaster},
+    {c:'var(--fright)',n:'Fright Fest',sub:'Houses open 6 pm, scare zones after dark',right:'',go:()=>setFilter('ff',true)}
+  ];
+}
+let hl=0,rowsNow=[];
+function renderResults(){
+  const v=q.value;qclear.hidden=!v;
+  rowsNow=v.trim()?search(v).map(r=>({c:colorOf(r.it),n:r.it.name,sub:(r.it.section?r.it.section+', ':'')+r.it.type.toLowerCase(),right:r.it.status==='closed'?'closed':away(r.d),go:()=>select(r.it.id,true)})):suggestions();
+  hl=0;results.innerHTML=v.trim()?'':'<div class="rhead">Quick picks</div>';
+  if(v.trim()&&!rowsNow.length)results.innerHTML='<div class="noresult">Nothing matches \u201c'+esc(v)+'\u201d. Try a ride name, food, restroom or exit.</div>';
+  rowsNow.forEach((r,i)=>{const b=document.createElement('button');b.type='button';b.className='res'+(i===0&&v.trim()?' hl':'');
+    b.innerHTML='<i style="background:'+r.c+'"></i><span style="min-width:0"><b>'+esc(r.n)+'</b><small>'+esc(r.sub)+'</small></span><span class="rm">'+r.right+'</span>';
+    b.onclick=()=>pick(r);results.appendChild(b)});
+  results.hidden=false;
+}
+function closeResults(){results.hidden=true}
+function pick(r){closeResults();q.blur();r.go()}
+q.addEventListener('focus',renderResults);
+q.addEventListener('input',renderResults);
+q.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeResults();q.blur()}
+  else if(e.key==='Enter'){e.preventDefault();if(rowsNow[hl])pick(rowsNow[hl])}
+  else if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const bs=results.querySelectorAll('.res');if(!bs.length)return;hl=(hl+(e.key==='ArrowDown'?1:-1)+bs.length)%bs.length;bs.forEach((b,i)=>b.classList.toggle('hl',i===hl));bs[hl].scrollIntoView({block:'nearest'})}
+});
+q.addEventListener('blur',()=>setTimeout(()=>{if(document.activeElement!==q)closeResults()},150));
+results.addEventListener('pointerdown',e=>e.preventDefault());
+qclear.onclick=()=>{q.value='';q.focus();renderResults()};
+svg.addEventListener('pointerdown',()=>{if(!results.hidden){closeResults();q.blur()}});
 
 new ResizeObserver(()=>{const cx=vb.x+vb.w/2,cy=vb.y+vb.h/2;const s=size();vb.h=vb.w*s.h/s.w;vb.x=cx-vb.w/2;vb.y=cy-vb.h/2;apply()}).observe(svg);
-updateHere();recomputePlan();renderPlan();setFilter(filter,false);drawRoute();initialView();tick();setInterval(tick,5000);
+recomputePlan();renderPlan();setFilter(filter,false);drawRoute();initialView();
+try{if(location.hostname.indexOf('github.io')>=0&&navigator.permissions)navigator.permissions.query({name:'geolocation'}).then(st=>{if(st.state==='granted')startGps()}).catch(()=>{})}catch(e){}
 })();
 </script>
 </body></html>
